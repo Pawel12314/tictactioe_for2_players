@@ -19,8 +19,8 @@ public class IteratorUkosnyDoTylu implements IIteratorPlansza{
     
     public IteratorUkosnyDoTylu(IPlansza p)
     {
-        x=3;
-        y=-1;
+        x=2;
+        y=0;
         pierwszy_x=2;
         pierwszy_y=0;
         plansza=p;
@@ -47,12 +47,15 @@ public class IteratorUkosnyDoTylu implements IIteratorPlansza{
             y++;
             return plansza.pobierzPionka(x, y);
         }
-        throw new IndexOutOfBoundsException("wyjątek w iteratorze ukośnym do tyłu");
+        throw new IndexOutOfBoundsException("wyjątek w iteratorze ukośnym do tyłu" +"xy"+x +" "+y);
     }
 
     @Override
     public IPionek obecny() {
-        return plansza.pobierzPionka(x, y);
+        
+            return plansza.pobierzPionka(x, y);
+        
+       
     }
     
 }

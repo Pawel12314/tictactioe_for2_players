@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package Obserwator;
 
 import com.mycompany.serverproject1.Gracz.Gracz;
-import com.mycompany.serverproject1.Gracz.IGraczObserwator;
+//import com.mycompany.serverproject1.Gracz.IGraczObserwator;
 import com.mycompany.serverproject1.Pionek.PionekFabryka.FabrykaPustyPionek;
 import com.mycompany.serverproject1.Pionek.PionekO;
 import com.mycompany.serverproject1.Pionek.PionekX;
@@ -26,6 +27,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @author Geoff
  */
+/*
 public class ManagerGier  {
     private Map<IGra,Set<IGraczObserwator>>gry = new ConcurrentHashMap<IGra,Set<IGraczObserwator>>();
     //ServerSocket socket;
@@ -126,3 +128,4 @@ public class ManagerGier  {
     }
  
 }
+*/

@@ -24,7 +24,7 @@ public class IteratorPionowy implements IIteratorPlansza {
         pierwszy_x=0;
         x=0;
         pierwszy_y=0;
-        y=-1;
+        y=0;
         
         this.plansza = plansza;
     }
@@ -66,12 +66,16 @@ public class IteratorPionowy implements IIteratorPlansza {
              }
                  
          }
-        throw new IndexOutOfBoundsException("wyjątek w iteratorze");
+        throw new IndexOutOfBoundsException("wyjątek w iteratorze" +"xy"+x +" "+y);
     }
 
     @Override
     public IPionek obecny() {
-        return plansza.pobierzPionka(x, y);
+        
+        
+            return plansza.pobierzPionka(x, y);
+        
+        
     }
     
 }

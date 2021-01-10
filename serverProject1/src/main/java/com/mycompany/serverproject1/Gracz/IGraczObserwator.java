@@ -11,8 +11,11 @@ import com.mycompany.serverproject1.Pionek.IPionek;
  *
  * @author Geoff
  */
-public abstract class IGraczObserwator implements Runnable{
+/*public interface IGraczObserwator
+{
+// implements Runnable{
     public abstract void updateRozpocznijGre();
     public abstract void zakonczGre();
-    public abstract void run();
+    //public abstract void run();
 }
+*/

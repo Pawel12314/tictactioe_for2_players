@@ -20,8 +20,8 @@ public class IteratorUkosnyDoPrzodu implements IIteratorPlansza{
     public IteratorUkosnyDoPrzodu(IPlansza p)
     {
        this.plansza = p;
-       x=-1;
-       y=-1;
+       x=0;
+       y=0;
        pierwszy_x=0;
        pierwszy_y=0;
     }
@@ -47,12 +47,15 @@ public class IteratorUkosnyDoPrzodu implements IIteratorPlansza{
             y++;
             return plansza.pobierzPionka(x, y);
         }
-        throw new IndexOutOfBoundsException("wyjątek w iteratorze ukośnym do przodu");
+        throw new IndexOutOfBoundsException("wyjątek w iteratorze ukośnym do przodu" +"xy"+x +" "+y);
     }
 
     @Override
     public IPionek obecny() {
-        return plansza.pobierzPionka(x, y);
+        
+            return plansza.pobierzPionka(x, y);
+        
+        
     }
     
 }

@@ -5,7 +5,9 @@
  */
 package com.mycompany.serverproject1;
 
-import Obserwator.ManagerGier;
+import Obserwator.Gra;
+import Obserwator.IGra;
+//import Obserwator.ManagerGier;
 import com.mycompany.serverproject1.Gracz.Gracz;
 import com.mycompany.serverproject1.IteratorPoPlanszy.Gosc.IMetodaPlansza;
 import com.mycompany.serverproject1.IteratorPoPlanszy.Gosc.MetodaIteratorPoziomy;
@@ -17,6 +19,7 @@ import com.mycompany.serverproject1.Pionek.PionekO;
 import com.mycompany.serverproject1.Pionek.PionekX;
 import com.mycompany.serverproject1.Plansza.IPlansza;
 import com.mycompany.serverproject1.Plansza.PlanszaProxyWirtualne;
+import java.awt.Frame;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Executors;
@@ -32,9 +35,12 @@ public class serverProject1 {
          try (var listener = new ServerSocket(58901)) {
             System.out.println("Tic Tac Toe Server is Running...");
             //var pool = Executors.newFixedThreadPool(2);
-            ManagerGier manager = new ManagerGier();
-            while (true) {
-                manager.register(listener.accept());
+            //ManagerGier manager = new ManagerGier();
+            
+            IGra gra = new Gra(new PlanszaProxyWirtualne(new FabrykaPustyPionek()));
+            while (gra.getGraczeSize()!=2) {
+                //manager.register(listener.accept());
+                gra.register(listener.accept());
                 System.out.println("registered new player");
                 
 

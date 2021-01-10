@@ -21,7 +21,7 @@ public class IteratorPoziomy implements IIteratorPlansza {
     public IteratorPoziomy(IPlansza plansza)
     {
         this.plansza = plansza;
-        x=-1;
+        x=0;
         y=0;
         pierwszy_x=0;
         pierwszy_y=0;
@@ -63,13 +63,16 @@ public class IteratorPoziomy implements IIteratorPlansza {
                 return plansza.pobierzPionka(x, y);
             }
         }
-        throw new IndexOutOfBoundsException("wyjatek -nastepny- iterator Poziomy ");
+        throw new IndexOutOfBoundsException("wyjatek -nastepny- iterator Poziomy " +"xy"+x +" "+y);
     }
 
     @Override
     public IPionek obecny() {
         
-        return plansza.pobierzPionka(x, y);
+        
+            return plansza.pobierzPionka(x, y);
+        
+        
     }
     
 }

@@ -17,9 +17,12 @@ public abstract class IStanGracza {
     public static String ZLA_INSTRUKCJA = "podales zła instrukcjr";
     public static String BAD_MOVE="zadany ruch jest nie prawidlowy";
     public static String CANT_MOVE="nie mozesz wykonac ruchu";
+    public static String OPPONENT_WIN="przeciwnik wygral";
+    public static String YOU_WIN="wygrales";
     public abstract String pobierzStrumienWejsciowy(String strumien);
-    
+    public abstract void zmienTure();
     public abstract Boolean sprawdzCzyKoniec();
+    public abstract void zakonczGre();
     //public boolean czyMogeRuszyc();
     //public boolean rusz();
     //public boolean czyWygralem();

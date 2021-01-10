@@ -7,6 +7,7 @@ package com.mycompany.serverproject1.Gracz;
 
 import Obserwator.Gra;
 import Obserwator.IGra;
+import com.mycompany.serverproject1.Gracz.Stany.IStanFabryka;
 import com.mycompany.serverproject1.Gracz.Stany.IStanGracza;
 import com.mycompany.serverproject1.Pionek.IPionek;
 import java.io.IOException;
@@ -19,7 +20,8 @@ import java.util.Scanner;
  *
  * @author Geoff
  */
-public class Gracz extends IGraczObserwator{
+public class Gracz extends Thread{//
+    //implements IGraczObserwator{
     private IPionek pionek;
     Socket socket;
     IGra gra_mediator;
@@ -35,16 +37,16 @@ public class Gracz extends IGraczObserwator{
         this.pionek = p;
         
         gra_mediator = g;
-        try
+       /* try
         {
             output = new PrintWriter(socket.getOutputStream());
             
         }
         catch(IOException ioe)
         {
-            gra_mediator.zakonczGre();
+            //gra_mediator.zakonczGre();
         }
-        
+        */
         
         stan = new StanOczekiwanieNaPrzeciwnika();
     }
@@ -53,10 +55,10 @@ public class Gracz extends IGraczObserwator{
         
     }*/
     
-    public synchronized void updateRozpocznijGre()
+    public void updateRozpocznijGre(IStanGracza stan)
     {
         System.out.println("zaladowano nowy thread");
-        stan = new StanTuraGracza();
+        this.stan = stan;
         
         //synchronized()
         output.println("ROZPOCZETO GRE\n");    
@@ -64,7 +66,7 @@ public class Gracz extends IGraczObserwator{
        
         
     }
-    public  void zakonczGre()
+    public synchronized void przerwijGre()
     {
         
         //stan = new StankoniecGry();
@@ -102,6 +104,10 @@ public class Gracz extends IGraczObserwator{
                     break;
                 }*/
                 //synchronized(graczMutex)
+                if(stan.sprawdzCzyKoniec())
+                {
+                    przerwijGre();
+                }
                 try{
                     System.out.println("running");
                     stan.pobierzStrumienWejsciowy(input.nextLine());
@@ -123,6 +129,15 @@ public class Gracz extends IGraczObserwator{
         
         
     }
+
+    public void zmienTure() {
+        stan.zmienTure();
+    }
+
+   
+    public void koniecGry() {
+        stan.zakonczGre();
+    }
    
     private class StanOczekiwanieNaPrzeciwnika extends IStanGracza
     {
@@ -136,7 +151,7 @@ public class Gracz extends IGraczObserwator{
             if(strumien.startsWith("exit"))
             {
                 output.write(EXIT_MSG_KOLEJKA);
-                    gra_mediator.zakonczGre();
+                    gra_mediator.przerwijGre();
             }
             else if(strumien.startsWith("move"))
             {
@@ -149,10 +164,21 @@ public class Gracz extends IGraczObserwator{
             
         return "";
         }
+        
 
         @Override
         public Boolean sprawdzCzyKoniec() {
             return false;
+        }
+
+        @Override
+        public void zmienTure() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void zakonczGre() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         
@@ -180,7 +206,7 @@ public class Gracz extends IGraczObserwator{
             if(command[0].equals("exit") && command.length==1)
             {
                 output.write(EXIT_MSG_KOLEJKA);
-                    gra_mediator.zakonczGre();
+                    gra_mediator.przerwijGre();
             }
             else if(command[0].equals("move") && command.length==3)
             {
@@ -191,7 +217,20 @@ public class Gracz extends IGraczObserwator{
                     if(gra_mediator.czyMogeRuszyc(x, y))
                     {
                         gra_mediator.wstawPionka(x, y, pionek);
-                        stan=new StanTuraPrzeciwnika();
+                        
+                        
+                        if(gra_mediator.sprawdzCzyWygrana())
+                        {
+                            gra_mediator.poinformujOWygranej();
+                            
+                        }
+                        
+                        else
+                        {
+                            gra_mediator.zmienTure();
+                        }
+                        
+                        
                     }
                     else{
                         output.println("nie mozna ruszyc");
@@ -218,6 +257,17 @@ public class Gracz extends IGraczObserwator{
         public Boolean sprawdzCzyKoniec() {
             return false;
         }
+
+        @Override
+        public void zmienTure() {
+            stan = new StanTuraPrzeciwnika();
+        }
+
+        @Override
+        public void zakonczGre() {
+            output.println(YOU_WIN);
+            stan = new StankoniecGry();
+        }
         
     }
     
@@ -233,7 +283,7 @@ public class Gracz extends IGraczObserwator{
             if(strumien.startsWith("exit"))
             {
                 output.write(EXIT_MSG_GRA);
-                    gra_mediator.zakonczGre();
+                    gra_mediator.przerwijGre();
             }
             else if(strumien.startsWith("move"))
             {
@@ -252,6 +302,17 @@ public class Gracz extends IGraczObserwator{
         public Boolean sprawdzCzyKoniec() {
             return false;
         }
+
+        @Override
+        public void zmienTure() {
+           stan = new StanTuraGracza();
+        }
+
+        @Override
+        public void zakonczGre() {
+            output.println(OPPONENT_WIN);
+            stan = new StankoniecGry();
+        }
         
     }
     private class StankoniecGry extends IStanGracza
@@ -267,7 +328,7 @@ public class Gracz extends IGraczObserwator{
              if(strumien.startsWith("exit"))
             {
                 output.write(EXIT_MSG_GRA);
-                    gra_mediator.zakonczGre();
+                    gra_mediator.przerwijGre();
             }
             else if(strumien.startsWith("move"))
             {
@@ -285,8 +346,35 @@ public class Gracz extends IGraczObserwator{
             return true;
         }
 
+        @Override
+        public void zmienTure() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void zakonczGre() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
        
     }
-    
+    public class StanFabrykaMojaTura extends IStanFabryka
+    {
+
+        @Override
+        public IStanGracza stworzStan() {
+            return new StanTuraGracza();
+        }
+        
+        
+    }
+    public class StanFabrykaTuraPrzeciwnika extends IStanFabryka
+    {
+        @Override
+        public IStanGracza stworzStan()
+        {
+            return new StanTuraPrzeciwnika();
+        }
+    }
     
 }
