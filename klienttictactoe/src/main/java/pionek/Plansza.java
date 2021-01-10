@@ -5,13 +5,10 @@
  */
 package pionek;
 
-import java.awt.Graphics2D;
-
 /**
  *
  * @author Geoff
  */
-public abstract class IPionek {
-    public abstract void draw(int x , int y);
-   
+public class Plansza {
+    private LinkedHashMap<I
 }

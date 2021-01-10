@@ -3,15 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pionek;
-
-import java.awt.Graphics2D;
+package pionek.PionekFactory;
 
 /**
  *
  * @author Geoff
  */
-public abstract class IPionek {
-    public abstract void draw(int x , int y);
-   
+public abstract class IPionekFactory {
+    public abstract String getBitmap_X();
+    public abstract String getBitmap_O();
 }
