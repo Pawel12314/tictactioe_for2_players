@@ -33,7 +33,10 @@ public class ConcretePionek implements IPionek {
     }
     @Override
     public void draw(Graphics2D g ,Point p) {
-        g.drawImage(pole, p.x, p.y, p.x + 1, p.y + 1,null);
+        g.drawImage(pole, p.x, p.y, p.x + 1, p.y + 1,
+                0, 0,400,400,
+                
+                null);
         
         
     }
@@ -55,8 +58,9 @@ public class ConcretePionek implements IPionek {
             Image im = ImageIO.read(new File(path));
             //Graphics2D bmp = im.createGraphics();
             //Bitmap bitmap;// = BitmapFactory.decodeStream(instream);
-            //IPionek p = new DekoratorPionek(new ConcretePionek(im));
-            IPionek p = new ConcretePionek(im);
+            IPionek p = new DekoratorPionek(new ConcretePionek(im));
+            //IPionek p = new ConcretePionek(im);
+            
             pionki.put(path, p);
             return p;
             }
@@ -66,6 +70,11 @@ public class ConcretePionek implements IPionek {
             }
             
         }
+    }
+
+    @Override
+    public IPionek getDecoree() {
+        return null;
     }
     
 }

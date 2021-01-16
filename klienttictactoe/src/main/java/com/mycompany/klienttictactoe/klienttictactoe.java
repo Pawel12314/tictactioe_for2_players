@@ -52,9 +52,10 @@ public class klienttictactoe extends JPanel{
 		for (WstawPole pole : plansza.pobierzPlansze()) {//
                     try
                     {
-                        //IPionek pionek = fabryka.getPionek(pole );
-                        IPionek pionek = new DekoratorPionek(fabryka.getPionek(pole));
+                        IPionek pionek = fabryka.getPionek(pole );
+                        //IPionek pionek = new DekoratorPionek(fabryka.getPionek(pole));
                          pionek.draw(g2d,pole.getPunkt());
+                         //pionek = pionek.getDecoree();
                     }
                     catch(IOException e)
                     {
@@ -82,6 +83,10 @@ public class klienttictactoe extends JPanel{
         plansza.wykonaj(w);
         WstawPole w1 = new WstawO(new Point(1,0),pionekFactory);
         plansza.wykonaj(w1);
+        
+        WstawPole w2 = new WstawX(new Point(2,2),pionekFactory);
+        plansza.wykonaj(w2);
+        
         fabryka = new PionekPylekFactory();
         
              

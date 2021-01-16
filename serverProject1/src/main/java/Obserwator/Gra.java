@@ -39,13 +39,13 @@ public class Gra extends IGra{
     
     //private ManagerGier manager;
     public static final String PUT_PIONEK_COMMAND = "PUT";
-    public static final String ROZPOCZYNA_X="X_ZACZYNA_GRE";
-    public static final String ROZPOCZYNA_O="O_ZACZYNA_GRE";
-    public static final String ZMIANA_TURY = "ZMIANA_TURY";
-    public static final String ZAKONCZONO_GRE="ZAKOCZONO_GRE";
-    public static final String KONIEC_GRY="KONIEC_GRY";
-    public static final String KTOS_WYGRAL="KTOS_WYGRAL";
-    public static final String KONTYNUUJ_GRE="KONTYNUUJ";
+    public static final String ROZPOCZYNA_X="1001";
+    public static final String ROZPOCZYNA_O="1002";
+    public static final String ZMIANA_TURY = "2000";
+    public static final String ZAKONCZONO_GRE="3000";
+    public static final String KONIEC_GRY="3001";
+    public static final String KTOS_WYGRAL="3002";
+    public static final String KONTYNUUJ_GRE="4000";
 // private Object mutex;
     
     
@@ -240,7 +240,7 @@ public class Gra extends IGra{
             {
                 for(Gracz g: gracze.values())
                 {
-                    g.queue.add(KONTYNUUJ_GRE);
+                   // g.queue.add(KONTYNUUJ_GRE);
                 }
                 return false;
             }

@@ -26,5 +26,9 @@ public abstract class IDekoratorPionek implements IPionek {
     public void draw(Graphics2D g,Point p) {
         pionek.draw(g,p);
     }
-    
+    public IPionek getDecoree()
+    {
+        return pionek;
+    }   
+         
 }

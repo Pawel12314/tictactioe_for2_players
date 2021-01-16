@@ -28,10 +28,15 @@ public class DekoratorPionek extends IDekoratorPionek {
     {
          AffineTransform trans = g.getTransform();
         AffineTransform tr = new AffineTransform();
-        //tr.translate(ZEROX,ZEROY);
+        //tr.translate(0,0);
         tr.scale(TILESIZE, TILESIZE);
         g.transform(tr);
         super.draw(g,p);
         g.setTransform(trans);
+    }
+
+    @Override
+    public IPionek getDecoree() {
+        return super.getDecoree();
     }
 }

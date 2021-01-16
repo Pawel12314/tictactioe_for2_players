@@ -15,5 +15,5 @@ import java.awt.Point;
 public interface IPionek {
     public static final int TILESIZE = 100;
     public abstract void draw(Graphics2D g ,Point p);
-   
+   public abstract IPionek getDecoree();
 }

@@ -86,7 +86,7 @@ public class Gracz extends Thread{//
     
     public void updateRozpocznijGre(IStanGracza stan)
     {
-        System.out.println("zaladowano nowy thread");
+        //System.out.println("zaladowano nowy thread");
         this.stan = stan;
         
         //synchronized()
@@ -170,10 +170,7 @@ public class Gracz extends Thread{//
             while( !stan.sprawdzCzyKoniec())
             {
               
-              if(stan instanceof StankoniecGry)
-              {
-                  System.out.println("EXIT!!!!!!!!!!!1");
-              }
+             
               String command = getPlayerStream();
               if(!command.isEmpty() && !command.isBlank())
               {
@@ -197,14 +194,7 @@ public class Gracz extends Thread{//
         
     }
 
-    public void zmienTure() {
-        stan.zmienTure();
-    }
-
    
-    public void koniecGry() {
-        stan.zakonczGre();
-    }
    
     private class StanOczekiwanieNaPrzeciwnika extends IStanGracza
     {
@@ -213,14 +203,14 @@ public class Gracz extends Thread{//
         {
             
         }
-        public String pobierzStrumienWejsciowy(String strumien)
+        public synchronized String pobierzStrumienWejsciowy(String strumien)
         {
-             output.println(strumien);
+             //output.println(strumien);
             String[] command = strumien.split(" ");
             
             if(strumien.startsWith("exit"))
             {
-                output.write(EXIT_MSG_KOLEJKA);
+                //output.write(EXIT_MSG_KOLEJKA);
                     gra_mediator.przerwijGre();
             }
             else if(strumien.startsWith("move"))
@@ -263,7 +253,7 @@ public class Gracz extends Thread{//
             {
                 try
                 {
-                    output.println(pionek.getPionek());
+                   // output.println(pionek.getPionek());
                 }
                 catch(Exception e)
                 {
@@ -295,28 +285,28 @@ public class Gracz extends Thread{//
         
 
         @Override
-        public Boolean sprawdzCzyKoniec() {
+        public synchronized Boolean sprawdzCzyKoniec() {
             return false;
         }
 
         @Override
-        public void zmienTure() {
+        public synchronized void zmienTure() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void zakonczGre() {
+        public synchronized void zakonczGre() {
             output.println(EXIT_MSG_KOLEJKA);
             stan = new StankoniecGry();
         }
 
         @Override
-        public void wygrana() {
+        public synchronized void wygrana() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void remis() {
+        public synchronized void remis() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
@@ -334,14 +324,13 @@ public class Gracz extends Thread{//
         }
 
         @Override
-        public String pobierzStrumienWejsciowy(String strumien) {
-            output.println(strumien);
+        public synchronized String pobierzStrumienWejsciowy(String strumien) {
+           // output.println(strumien);
             String[] command = strumien.split(" ");
-            output.println("----");
-            for(String s : command)
-            {
-                output.println(s);
-            }
+          //  output.print("\n\n\n");
+          //  output.println(command.length);
+           // output.println(command[0]);
+           // output.print("\n\n\n");
             if(command[0].equals("exit") && command.length==1)
             {
                 //output.write(EXIT_MSG_KOLEJKA);
@@ -366,7 +355,7 @@ public class Gracz extends Thread{//
             }
             else if(command[0].equals(Gra.PUT_PIONEK_COMMAND)&&command.length==4)
             {
-                output.write(RUCH+" "+command[1]+" "+command[2]+" "+command[3]);
+                output.println(strumien);
                 
                 if(gra_mediator.sprawdzCzyWygrana())
                         {
@@ -390,7 +379,7 @@ public class Gracz extends Thread{//
             }
             else if(command[0].equals("move") && command.length==3)
             {
-                output.println(command[1]+" "+command[2]+" endl");
+              //  output.println(command[1]+" "+command[2]+" endl");
                 try
                 {
                     int x = Integer.parseInt(command[1]);
@@ -406,7 +395,7 @@ public class Gracz extends Thread{//
                         
                     }
                     else{
-                        output.println("nie mozna ruszyc");
+                 //       output.println("nie mozna ruszyc");
                         output.println(BAD_MOVE);
                     }
                     
@@ -414,7 +403,7 @@ public class Gracz extends Thread{//
                 catch(NumberFormatException e)
                 {
                     e.printStackTrace();
-                    output.write(BAD_MOVE);
+                    output.println(BAD_MOVE);
                 }
                 catch(NoSuchFieldException e)
                 {
@@ -424,7 +413,7 @@ public class Gracz extends Thread{//
             
             else
             {
-                output.println("zla komenda111");
+               // output.println("zla komenda111");
                 output.println(ZLA_INSTRUKCJA);
             }
             
@@ -432,29 +421,29 @@ public class Gracz extends Thread{//
         }
 
         @Override
-        public Boolean sprawdzCzyKoniec() {
+        public synchronized Boolean sprawdzCzyKoniec() {
             return false;
         }
 
         @Override
-        public void zmienTure() {
+        public synchronized void zmienTure() {
             stan = new StanTuraPrzeciwnika();
         }
 
         @Override
-        public void zakonczGre() {
+        public  synchronized void zakonczGre() {
             output.println(EXIT_MSG_GRA);
             stan = new StankoniecGry();
         }
 
         @Override
-        public void remis() {
+        public synchronized void remis() {
             output.println(REMIS);
             stan = new StankoniecGry();
         }
 
         @Override
-        public void wygrana() {
+        public synchronized void wygrana() {
             output.println(YOU_WIN);
             stan = new StankoniecGry();
         }
@@ -467,13 +456,13 @@ public class Gracz extends Thread{//
         }
 
         @Override
-        public String pobierzStrumienWejsciowy(String strumien) {
-             output.println(strumien);
+        public synchronized String pobierzStrumienWejsciowy(String strumien) {
+            // output.println(strumien);
             String[] command = strumien.split(" ");
             
             if(strumien.startsWith("exit"))
             {
-                output.write(EXIT_MSG_GRA);
+              //  output.write(EXIT_MSG_GRA);
                     gra_mediator.przerwijGre();
             }
             else if(strumien.startsWith("move"))
@@ -482,7 +471,7 @@ public class Gracz extends Thread{//
             }
             else if(command[0].equals(Gra.PUT_PIONEK_COMMAND)&&command.length==4)
             {
-               output.write(RUCH+" "+command[1]+" "+command[2]+" "+command[3]);
+               output.println(strumien);
                 
             }
             else if(command[0].equals(Gra.KTOS_WYGRAL)&&command.length==1)
@@ -504,6 +493,7 @@ public class Gracz extends Thread{//
             }
             else
             {
+                //output.println(strumien+"\n\n\n\n");
                 output.println(ZLA_INSTRUKCJA);
             }
            
@@ -512,29 +502,29 @@ public class Gracz extends Thread{//
         }
 
         @Override
-        public Boolean sprawdzCzyKoniec() {
+        public synchronized Boolean sprawdzCzyKoniec() {
             return false;
         }
 
         @Override
-        public void zmienTure() {
+        public synchronized void zmienTure() {
            stan = new StanTuraGracza();
         }
 
         @Override
-        public void zakonczGre() {
+        public synchronized void zakonczGre() {
             output.println(EXIT_MSG_GRA);
             stan = new StankoniecGry();
         }
 
         @Override
-        public void remis() {
+        public synchronized void remis() {
             output.println(REMIS);
             stan = new StankoniecGry();
         }
 
         @Override
-        public void wygrana() {
+        public synchronized void wygrana() {
             output.println(OPPONENT_WIN);
             stan = new StankoniecGry();
         }
@@ -549,7 +539,7 @@ public class Gracz extends Thread{//
        
 
         @Override
-        public String pobierzStrumienWejsciowy(String strumien) {
+        public synchronized String pobierzStrumienWejsciowy(String strumien) {
            
             
                 output.println(ZLA_INSTRUKCJA);
@@ -558,27 +548,27 @@ public class Gracz extends Thread{//
         }
 
         @Override
-        public Boolean sprawdzCzyKoniec() {
+        public synchronized Boolean sprawdzCzyKoniec() {
             return true;
         }
 
         @Override
-        public void zmienTure() {
+        public synchronized void zmienTure() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void zakonczGre() {
+        public synchronized void zakonczGre() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void wygrana() {
+        public synchronized void wygrana() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void remis() {
+        public  synchronized void remis() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
