@@ -17,13 +17,18 @@ import com.mycompany.serverproject1.IteratorPoPlanszy.IteratorPionowy;
 //import com.mycompany.serverproject1.Gracz.IGraczObserwator;
 import com.mycompany.serverproject1.Pionek.IPionek;
 import com.mycompany.serverproject1.Pionek.PionekO;
+import com.mycompany.serverproject1.Pionek.PionekPusty;
 import com.mycompany.serverproject1.Pionek.PionekX;
 import com.mycompany.serverproject1.Plansza.IPlansza;
 import java.net.Socket;
+import java.nio.channels.AsynchronousSocketChannel;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -31,21 +36,35 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Geoff
  */
 public class Gra extends IGra{
-    //private ManagerGier manager;
     
-    // private Object mutex;
+    //private ManagerGier manager;
+    public static final String PUT_PIONEK_COMMAND = "PUT";
+    public static final String ROZPOCZYNA_X="X_ZACZYNA_GRE";
+    public static final String ROZPOCZYNA_O="O_ZACZYNA_GRE";
+    public static final String ZMIANA_TURY = "ZMIANA_TURY";
+    public static final String ZAKONCZONO_GRE="ZAKOCZONO_GRE";
+    public static final String KONIEC_GRY="KONIEC_GRY";
+    public static final String KTOS_WYGRAL="KTOS_WYGRAL";
+    public static final String KONTYNUUJ_GRE="KONTYNUUJ";
+// private Object mutex;
+    
+    
     
     private Map<Character,Gracz> gracze = new ConcurrentHashMap<Character,Gracz>();
+    
     //private Map<IGra,Set<Gracz>>gry = new ConcurrentHashMap<IGra,Set<Gracz>>();
     public Gra(IPlansza plansza)
     {
         super(plansza);
+        queue   = new LinkedBlockingQueue<String>();
+        
         
     //    this.mutex = new Object();
     }
     @Override
-    public void register(Socket socket)
+    public void register(Socket  socket)
     {
+        
         if(gracze.size()==1)
         {
             IPionek p = new PionekX();
@@ -65,9 +84,15 @@ public class Gra extends IGra{
                     
     }
    @Override
-    public synchronized void wstawPionka(int x, int y, IPionek p)
+    public synchronized void wstawPionka(int x, int y, IPionek p) throws NoSuchFieldException
     {
         plansza.dodajPionka(x, y, p);
+    
+            //g.queue.add(PUT_PIONEK_COMMAND+" "+ p.getPionek()+" "+String.valueOf(x)+" "+String.valueOf(y));
+            for(Gracz g : gracze.values())
+            {
+                g.queue.add(PUT_PIONEK_COMMAND+" "+ p.getPionek()+" "+String.valueOf(x)+" "+String.valueOf(y));
+            }
         
         
     }
@@ -75,11 +100,11 @@ public class Gra extends IGra{
     @Override
     protected synchronized void RozpocznijGre()
     {
-            Gracz g1 =gracze.get('x');
-            
-            g1.updateRozpocznijGre(g1.new StanFabrykaMojaTura().stworzStan());
-            Gracz g2 = gracze.get('o');
-            g2.updateRozpocznijGre(g2.new StanFabrykaTuraPrzeciwnika().stworzStan());
+        
+        for(Gracz g:gracze.values())
+        {
+            g.queue.add(ROZPOCZYNA_X);
+        }
        
     }
     @Override
@@ -98,11 +123,10 @@ public class Gra extends IGra{
     @Override
     public synchronized int przerwijGre(/*IGraczObserwator gracz*/) {
         //Set<IGraczObserwator>gracze  = manager.pobierzGraczy(this);
-        for(Gracz g : gracze.values())
+        
+        for(Gracz g: gracze.values())
         {
-            g.przerwijGre();
-            
-            
+            g.queue.add(ZAKONCZONO_GRE);
         }
         
         return 1;
@@ -115,18 +139,19 @@ public class Gra extends IGra{
 
     @Override
     public void zmienTure() {
-        
         for(Gracz g : gracze.values())
         {
-            g.zmienTure();
+            g.queue.add(ZMIANA_TURY);
         }
+        
     }
 
     @Override
     public void poinformujOWygranej() {
+        //queue.add(KONIEC_GRY);
         for(Gracz g : gracze.values())
         {
-            g.koniecGry();
+            g.queue.add(KTOS_WYGRAL);
         }
     }
     @Override
@@ -202,6 +227,26 @@ public class Gra extends IGra{
        
        return false;
         
+    }
+
+    @Override
+    public boolean sprawdzCzyKoniec() {
+        IMetodaPlansza metoda = new MetodaIteratorPionowy();
+        IIteratorPlansza iterator = plansza.Pobierziterator(metoda);
+        while(iterator.czyNastepny())
+        {
+            IPionek p = iterator.nastepny();
+            if(p instanceof PionekPusty)
+            {
+                for(Gracz g: gracze.values())
+                {
+                    g.queue.add(KONTYNUUJ_GRE);
+                }
+                return false;
+            }
+            
+        }
+        return true;
     }
     
    

@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pionek;
+package visitor;
+
+import plansza.Plansza;
 
 /**
  *
  * @author Geoff
  */
-public class Plansza {
-    private LinkedHashMap<I
+public abstract class Visitor {
+    public abstract Object wykonajNaPlanszy(Plansza p);
+    public abstract Object wykonajNaPowtorce(Plansza p);
 }

@@ -20,9 +20,14 @@ import com.mycompany.serverproject1.Pionek.PionekX;
 import com.mycompany.serverproject1.Plansza.IPlansza;
 import com.mycompany.serverproject1.Plansza.PlanszaProxyWirtualne;
 import java.awt.Frame;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.channels.AsynchronousServerSocketChannel;
+import java.nio.channels.AsynchronousSocketChannel;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -33,16 +38,29 @@ public class serverProject1 {
         
         
          try (var listener = new ServerSocket(58901)) {
+            // listener.bind(new InetSocketAddress("127.0.0.1", 58901));
             System.out.println("Tic Tac Toe Server is Running...");
             //var pool = Executors.newFixedThreadPool(2);
             //ManagerGier manager = new ManagerGier();
-            
+            //var future = listener.accept();
             IGra gra = new Gra(new PlanszaProxyWirtualne(new FabrykaPustyPionek()));
             while (gra.getGraczeSize()!=2) {
                 //manager.register(listener.accept());
-                gra.register(listener.accept());
+                //Future<AsynchronousSocketChannel> asyncFuture = listener
+            //  .accept();
+                try
+                {
+                    //final AsynchronousSocketChannel asyncChannel = asyncFuture.get(10,TimeUnit.NANOSECONDS);
+                    gra.register(listener.accept());
+                }
+                catch(Exception e)
+                {
+                }
                 System.out.println("registered new player");
                 
+                
+                
+               
 
             }
         }

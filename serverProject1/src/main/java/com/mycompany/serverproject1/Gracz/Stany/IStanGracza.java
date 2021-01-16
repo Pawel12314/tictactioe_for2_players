@@ -19,10 +19,15 @@ public abstract class IStanGracza {
     public static String CANT_MOVE="nie mozesz wykonac ruchu";
     public static String OPPONENT_WIN="przeciwnik wygral";
     public static String YOU_WIN="wygrales";
+    public static String REMIS="remis";
+    public static String RUCH="move";
+    public abstract void wygrana();
     public abstract String pobierzStrumienWejsciowy(String strumien);
     public abstract void zmienTure();
     public abstract Boolean sprawdzCzyKoniec();
     public abstract void zakonczGre();
+    public abstract void remis();
+    
     //public boolean czyMogeRuszyc();
     //public boolean rusz();
     //public boolean czyWygralem();

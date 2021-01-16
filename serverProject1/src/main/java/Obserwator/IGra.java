@@ -11,11 +11,14 @@ import com.mycompany.serverproject1.IteratorPoPlanszy.IIteratorPlansza;
 import com.mycompany.serverproject1.Pionek.IPionek;
 import com.mycompany.serverproject1.Plansza.IPlansza;
 import java.net.Socket;
+import java.nio.channels.AsynchronousSocketChannel;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 /**s
  *
  * @author Geoff
@@ -26,7 +29,7 @@ public abstract class IGra {
     //protected ManagerGier manager;
     protected IPlansza plansza;
     protected abstract void RozpocznijGre();
-    public abstract void wstawPionka(int x, int y, IPionek p);
+    public abstract void wstawPionka(int x, int y, IPionek p) throws NoSuchFieldException;
     public abstract boolean czyMogeRuszyc(int x, int y);
     //public ExecutorService executors;
     public abstract int getGraczeSize();
@@ -35,8 +38,9 @@ public abstract class IGra {
     public abstract void zmienTure();
     public abstract void poinformujOWygranej();
     public abstract Boolean sprawdzCzyWygrana();
-    
+    public BlockingQueue<String> queue;
     protected abstract boolean iteruj(IIteratorPlansza iter);
+    public abstract boolean sprawdzCzyKoniec();
     public Object serverMutex;
     public IGra( IPlansza plansza)
     {
