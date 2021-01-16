@@ -3,17 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pionek;
+package pionek.PionekFactory;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.Image;
 
 /**
  *
  * @author Geoff
  */
-public interface IPionek {
-    public static final int TILESIZE = 100;
-    public abstract void draw(Graphics2D g ,Point p);
-   
+public abstract class IBackgroundFactory {
+    public abstract Image getBackgorund();
 }

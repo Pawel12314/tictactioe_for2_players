@@ -3,42 +3,44 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package plansza;
+package visitor;
 
-import java.awt.List;
 import java.awt.Point;
-import java.util.ArrayList;
 import pionek.PionekFactory.IPionekFactory;
-import visitor.Visitor;
-import visitor.WstawPole;
+import plansza.Plansza;
 
 /**
  *
  * @author Geoff
  */
-public class Plansza implements IPlansza{
+public class WstawO extends WstawPole{
+
+    private Point punkt;
     
-    private ArrayList<WstawPole> lista;
-    
-    
-    public Plansza()
+    public WstawO(Point p,IPionekFactory factory)
     {
-        lista = new ArrayList<WstawPole>();
+        super(factory.getBitmap_O());
+        punkt=p;
+    }
+    
+    public Point getPunkt()
+    {
+        return punkt;
     }
     @Override
-    public Object wykonaj(Visitor v) {
-        v.wykonajNaPlanszy(this);
+    public Object wykonajNaPlanszy(Plansza p) {
+        p.pobierzPlansze().add(this);
         return null;
     }
 
     @Override
-    public void wybierzGrafiki(IPionekFactory factory) {
+    public Object wykonajNaPowtorce(Plansza p) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public ArrayList<WstawPole> pobierzPlansze() {
-        return lista;
+    public String getPath() {
+        return path;
     }
     
 }

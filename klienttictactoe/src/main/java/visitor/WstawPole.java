@@ -5,10 +5,19 @@
  */
 package visitor;
 
+import java.awt.Point;
+
 /**
  *
  * @author Geoff
  */
 public abstract class WstawPole extends Visitor {
     
+    protected String path;
+    public WstawPole(String s)
+    {
+        path = s;
+    }
+    public abstract Point getPunkt();
+    public abstract String getPath();
 }

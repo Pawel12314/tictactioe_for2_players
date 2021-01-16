@@ -7,6 +7,7 @@ package pionek.pylek;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,21 +18,24 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import pionek.IPionek;
+import pionek.dekorator.DekoratorPionek;
 
 /**
  *
  * @author Geoff
  */
-public class ConcretePionek extends IPionek {
-    private Graphics2D pole;
+public class ConcretePionek implements IPionek {
+    private Image pole;
     private static Map<String,IPionek> pionki = new HashMap<String,IPionek>();
-    public ConcretePionek(Graphics2D g)
+    public ConcretePionek(Image g)
     {
         this.pole = g;
     }
     @Override
-    public void draw(int x, int y) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void draw(Graphics2D g ,Point p) {
+        g.drawImage(pole, p.x, p.y, p.x + 1, p.y + 1,null);
+        
+        
     }
 
     
@@ -48,10 +52,11 @@ public class ConcretePionek extends IPionek {
             try
             {
                 //FileInputStream instream = new  FileInputStream(file);
-            BufferedImage im = ImageIO.read(new File(path));
-            Graphics2D bmp = im.createGraphics();
+            Image im = ImageIO.read(new File(path));
+            //Graphics2D bmp = im.createGraphics();
             //Bitmap bitmap;// = BitmapFactory.decodeStream(instream);
-            IPionek p = new ConcretePionek(bmp);
+            //IPionek p = new DekoratorPionek(new ConcretePionek(im));
+            IPionek p = new ConcretePionek(im);
             pionki.put(path, p);
             return p;
             }
