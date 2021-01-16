@@ -11,16 +11,16 @@ package com.mycompany.serverproject1.Gracz.Stany;
  */
 public abstract class IStanGracza {
     
-    public static String EXIT_MSG_KOLEJKA = "zakonczyles oczekiwanie na gre";
-    public static String NIE_TWOJA_TURA = "nie mozesz ruszyc. trwa tura przeciwnika";
-    public static String EXIT_MSG_GRA = "wyszedłeśs z gry";
-    public static String ZLA_INSTRUKCJA = "podales zła instrukcjr";
-    public static String BAD_MOVE="zadany ruch jest nie prawidlowy";
-    public static String CANT_MOVE="nie mozesz wykonac ruchu";
-    public static String OPPONENT_WIN="przeciwnik wygral";
-    public static String YOU_WIN="wygrales";
-    public static String REMIS="remis";
-    public static String RUCH="move";
+    public static String EXIT_MSG_KOLEJKA = "QUIT_QUEUE";
+    public static String NIE_TWOJA_TURA = "NOT_TURN";
+    public static String EXIT_MSG_GRA = "BREAK";
+    public static String ZLA_INSTRUKCJA = "BAD_INSTR";
+    public static String BAD_MOVE="BAD_MOVE";
+    public static String CANT_MOVE="CANT_MOVE";
+    public static String OPPONENT_WIN="OPPONENT_WIN";
+    public static String YOU_WIN="WON";
+    public static String REMIS="REMIS";
+    public static String RUCH="MOVE";
     public abstract void wygrana();
     public abstract String pobierzStrumienWejsciowy(String strumien);
     public abstract void zmienTure();

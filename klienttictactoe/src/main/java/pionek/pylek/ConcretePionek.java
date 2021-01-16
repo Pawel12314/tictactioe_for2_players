@@ -17,6 +17,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 import pionek.IPionek;
 import pionek.dekorator.DekoratorPionek;
 

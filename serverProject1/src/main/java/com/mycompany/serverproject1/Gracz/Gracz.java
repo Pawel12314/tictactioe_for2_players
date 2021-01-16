@@ -144,7 +144,7 @@ public class Gracz extends Thread{//
         }
         String s = new String(bytes, StandardCharsets.UTF_8);
         //if(s.endsWith("\n"));
-            s = s.replace("\n", "");
+            s = s.replace("\n", "").replace("\r", "");
 //System.out.println(s);
         return s;
     }
@@ -180,6 +180,7 @@ public class Gracz extends Thread{//
               {
                   continue;
               }
+              System.out.println(queue.element());
               stan.pobierzStrumienWejsciowy(queue.take());
              
             }
