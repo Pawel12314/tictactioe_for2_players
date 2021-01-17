@@ -7,6 +7,7 @@ package com.mycompany.serverproject1.Gracz;
 
 import Obserwator.Gra;
 import Obserwator.IGra;
+import com.mycompany.serverproject1.Gracz.Polecenie.Polecenie;
 import com.mycompany.serverproject1.Gracz.Stany.IStanFabryka;
 import com.mycompany.serverproject1.Gracz.Stany.IStanGracza;
 import com.mycompany.serverproject1.Pionek.IPionek;
@@ -30,6 +31,7 @@ import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -44,8 +46,9 @@ public class Gracz extends Thread{//
     IGra gra_mediator;
     Scanner input;
     PrintWriter output;
-    IStanGracza stan;
+    public IStanGracza stan;
     Object graczMutex;
+    public BlockingQueue<Polecenie>queuePolecenie;
     
     public BlockingQueue<String> queue;
     //Object serverMutex;
@@ -55,6 +58,7 @@ public class Gracz extends Thread{//
         this.socket=socket;
         this.pionek = p;
         queue= new LinkedBlockingDeque<String>();
+        queuePolecenie = new LinkedBlockingQueue<Polecenie>();
        /* try
         {
             socket.setSoTimeout(5000);
@@ -84,37 +88,8 @@ public class Gracz extends Thread{//
         
     }*/
     
-    public void updateRozpocznijGre(IStanGracza stan)
-    {
-        //System.out.println("zaladowano nowy thread");
-        this.stan = stan;
-        
-        //synchronized()
-        output.println("ROZPOCZETO GRE\n");    
-        
-       
-        
-    }
-    public synchronized void przerwijGre()
-    {
-        
-        //stan = new StankoniecGry();
-        //synchronized(graczMutex)
-        //{
-           /* try
-            {
-                
-                //socket.close();
-                input.close();
-                output.close();
-            }
-            catch(IOException e)
-            {
-
-            }*/
-        //}
-        
-    }
+    
+ 
     public String getPlayerStream()
     {
         ArrayList<Byte> ar = new ArrayList<Byte>();
@@ -172,20 +147,19 @@ public class Gracz extends Thread{//
               
              
               String command = getPlayerStream();
+              
               if(!command.isEmpty() && !command.isBlank())
               {
-                  queue.add(command);
+                  stan.pobierzStrumienWejsciowy(command);
               }
-              if(queue.isEmpty())
+              if(queuePolecenie.isEmpty())
               {
                   continue;
               }
-              System.out.println(queue.element());
-              stan.pobierzStrumienWejsciowy(queue.take());
+              queuePolecenie.take().wykonaj();
              
             }
-            //output.close();
-            //socket.close();
+            
         }
         catch(Exception e)
         {
@@ -218,63 +192,9 @@ public class Gracz extends Thread{//
             {
                 output.println(CANT_MOVE);
             }
-            else if(command[0].equals(Gra.ZAKONCZONO_GRE) && command.length==1)
-            {
-                stan.zakonczGre();
-            }
-            else if(command[0].equals(Gra.ROZPOCZYNA_O) && command.length==1)
-            {
-                try
-                {
-                    output.println(pionek.getPionek());
-                }
-                catch(Exception e)
-                {
-                    
-                }
-                
-                      
-                     
-                try
-                {
-                    if(pionek.getPionek()=='o')
-                    {
-                        stan = new StanTuraGracza();
-                    }
-                    else
-                    {
-                        stan = new StanTuraPrzeciwnika();
-                    }
-                }catch(NoSuchFieldException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-            else if(command[0].equals(Gra.ROZPOCZYNA_X) && command.length==1)
-            {
-                try
-                {
-                   // output.println(pionek.getPionek());
-                }
-                catch(Exception e)
-                {
-                    
-                }
-                try
-                {
-                    if(pionek.getPionek()=='x')
-                    {
-                        stan = new StanTuraGracza();
-                    }
-                    else
-                    {
-                        stan = new StanTuraPrzeciwnika();
-                    }
-                }catch(NoSuchFieldException e)
-                {
-                    e.printStackTrace();
-                }
-            }
+            
+            
+            
             else
             {
                 output.println(ZLA_INSTRUKCJA);
@@ -311,6 +231,33 @@ public class Gracz extends Thread{//
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @Override
+        public void wstawPionka(char pionek, int x, int y) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void rozpocznijGre(Character pionekRozpoczynajacy) {
+           
+            
+              
+                try
+                {
+                    if(pionekRozpoczynajacy.equals(pionek.getPionek()))
+                    {
+                        stan = new StanTuraGracza();
+                    }
+                    else
+                    {
+                        stan = new StanTuraPrzeciwnika();
+                    }
+                }catch(NoSuchFieldException e)
+                {
+                    e.printStackTrace();
+                }
+            
+        }
+
         
         
         
@@ -338,46 +285,11 @@ public class Gracz extends Thread{//
                     gra_mediator.przerwijGre();
             }
             
-            else if(command[0].equals(Gra.KTOS_WYGRAL)&&command.length==1)
-            {
-                stan.wygrana();
-            }
-            else if(command[0].equals(Gra.KONIEC_GRY)&&command.length==1)
-            {
-                stan.remis();
-            }
-            else if(command[0].equals(Gra.ZAKONCZONO_GRE) && command.length==1)
-            {
-                stan.zakonczGre();
-            }
-            else if(command[0].equals(Gra.ZMIANA_TURY)&&command.length==1)
-            {
-                stan.zmienTure();
-            }
-            else if(command[0].equals(Gra.PUT_PIONEK_COMMAND)&&command.length==4)
-            {
-                output.println(strumien);
-                
-                if(gra_mediator.sprawdzCzyWygrana())
-                        {
-                            gra_mediator.poinformujOWygranej();
-                            
-                        }
-                        
-                        else
-                        {
-                            if(gra_mediator.sprawdzCzyKoniec())
-                            {
-                                gra_mediator.przerwijGre();
-                            }
-                            else
-                            {
-                               gra_mediator.zmienTure(); 
-                            }
-                            
-                        }
-                
-            }
+            
+            
+           
+            
+            
             else if(command[0].equals("move") && command.length==3)
             {
               //  output.println(command[1]+" "+command[2]+" endl");
@@ -448,6 +360,35 @@ public class Gracz extends Thread{//
             output.println(YOU_WIN);
             stan = new StankoniecGry();
         }
+
+        @Override
+        public void wstawPionka(char pionek, int x, int y) {
+            output.println("PUT "+pionek+" "+String.valueOf(x)+" "+String.valueOf(y));
+                
+                if(gra_mediator.sprawdzCzyWygrana())
+                        {
+                            gra_mediator.poinformujOWygranej();
+                            
+                        }
+                        
+                        else
+                        {
+                            if(gra_mediator.sprawdzCzyKoniec())
+                            {
+                                gra_mediator.przerwijGre();
+                            }
+                            else
+                            {
+                               gra_mediator.zmienTure(); 
+                            }
+                            
+                        }
+        }
+
+        @Override
+        public void rozpocznijGre(Character pionek) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
         
     }
     
@@ -470,28 +411,7 @@ public class Gracz extends Thread{//
             {
                 output.println(NIE_TWOJA_TURA);
             }
-            else if(command[0].equals(Gra.PUT_PIONEK_COMMAND)&&command.length==4)
-            {
-               output.println(strumien);
-                
-            }
-            else if(command[0].equals(Gra.KTOS_WYGRAL)&&command.length==1)
-            {
-                stan.wygrana();
-            }
             
-            else if(command[0].equals(Gra.KONIEC_GRY)&&command.length==1)
-            {
-                stan.remis();
-            }
-            else if(command[0].equals(Gra.ZAKONCZONO_GRE) && command.length==1)
-            {
-                stan.zakonczGre();
-            }
-            else if(command[0].equals(Gra.ZMIANA_TURY)&&command.length==1)
-            {
-                stan.zmienTure();
-            }
             else
             {
                 //output.println(strumien+"\n\n\n\n");
@@ -528,6 +448,16 @@ public class Gracz extends Thread{//
         public synchronized void wygrana() {
             output.println(OPPONENT_WIN);
             stan = new StankoniecGry();
+        }
+
+        @Override
+        public void wstawPionka(char pionek, int x, int y) {
+            output.println("PUT "+pionek+" "+String.valueOf(x)+" "+String.valueOf(y));
+        }
+
+        @Override
+        public void rozpocznijGre(Character pionek) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
         
     }
@@ -570,6 +500,16 @@ public class Gracz extends Thread{//
 
         @Override
         public  synchronized void remis() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void wstawPionka(char pionek, int x, int y) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void rozpocznijGre(Character pionek) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

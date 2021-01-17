@@ -27,7 +27,7 @@ public class Plansza implements IPlansza{
     }
     @Override
     public Object wykonaj(Visitor v) {
-        v.wykonajNaPlanszy(this);
+        v.wykonaj(this);
         return null;
     }
 

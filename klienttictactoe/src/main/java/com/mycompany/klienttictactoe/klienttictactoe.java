@@ -73,6 +73,7 @@ public class klienttictactoe extends JPanel{
     public static String GAME_OPPONENT_WIN="przeciwnik wygral";
     public static String GAME_YOU_WIN="Wygrales";
     public static String GAME_REMIS="REMIS";
+    public static String GAME_CONNECTION_FAIL="nie udalo sie nawiazac polaczenia z sewrwerem";
     //public static String GAME_RUCH="MOVE";
     
     Socket socket;
@@ -126,6 +127,7 @@ public class klienttictactoe extends JPanel{
         }
         catch(Exception e)
         {
+            JOptionPane.showMessageDialog(null, GAME_CONNECTION_FAIL,"action",JOptionPane.INFORMATION_MESSAGE);
             e.printStackTrace();
         }
         try
@@ -245,6 +247,10 @@ public class klienttictactoe extends JPanel{
         JFrame frame = new JFrame("Chess");
         frame.addWindowListener(new WindowAdapter() {
         public void windowClosing(WindowEvent e) {
+            if(board.socket==null||!board.socket.isClosed())
+            {
+                return;
+            }
           board.out.println("exit");
             
         }

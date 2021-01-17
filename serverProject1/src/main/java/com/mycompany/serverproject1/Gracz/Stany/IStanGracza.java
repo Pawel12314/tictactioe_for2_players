@@ -5,6 +5,8 @@
  */
 package com.mycompany.serverproject1.Gracz.Stany;
 
+import com.mycompany.serverproject1.Pionek.IPionek;
+
 /**
  *
  * @author Geoff
@@ -27,7 +29,8 @@ public abstract class IStanGracza {
     public abstract Boolean sprawdzCzyKoniec();
     public abstract void zakonczGre();
     public abstract void remis();
-    
+    public abstract void wstawPionka(char pionek,int x, int y);
+    public abstract void rozpocznijGre(Character pionek);
     //public boolean czyMogeRuszyc();
     //public boolean rusz();
     //public boolean czyWygralem();

@@ -3,16 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package visitor;
-
-import plansza.Plansza;
-//import plansza.PlanszaNagranie;
+package com.mycompany.serverproject1.Gracz.Polecenie;
 
 /**
  *
  * @author Geoff
  */
-public abstract class Visitor {
-    public abstract Object wykonaj(Plansza p);
-   // public abstract Object wykonaj(PlanszaNagranie p);
+public interface Polecenie {
+    public void wykonaj();
 }

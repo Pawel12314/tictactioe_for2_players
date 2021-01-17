@@ -6,6 +6,11 @@
 package Obserwator;
 
 import com.mycompany.serverproject1.Gracz.Gracz;
+import com.mycompany.serverproject1.Gracz.Polecenie.PolecenieRozpocznijGre;
+import com.mycompany.serverproject1.Gracz.Polecenie.PolecenieWstawPionka;
+import com.mycompany.serverproject1.Gracz.Polecenie.PolecenieWygrana;
+import com.mycompany.serverproject1.Gracz.Polecenie.PolecenieWyjdzZgry;
+import com.mycompany.serverproject1.Gracz.Polecenie.PolecenieZmianaTury;
 import com.mycompany.serverproject1.Gracz.Stany.IStanFabryka;
 import com.mycompany.serverproject1.IteratorPoPlanszy.Gosc.IMetodaPlansza;
 import com.mycompany.serverproject1.IteratorPoPlanszy.Gosc.MetodaIteratorPionowy;
@@ -91,7 +96,9 @@ public class Gra extends IGra{
             //g.queue.add(PUT_PIONEK_COMMAND+" "+ p.getPionek()+" "+String.valueOf(x)+" "+String.valueOf(y));
             for(Gracz g : gracze.values())
             {
-                g.queue.add(PUT_PIONEK_COMMAND+" "+ p.getPionek()+" "+String.valueOf(x)+" "+String.valueOf(y));
+                
+                g.queuePolecenie.add(new PolecenieWstawPionka(g, p.getPionek(), x, y));
+                
             }
         
         
@@ -103,7 +110,7 @@ public class Gra extends IGra{
         
         for(Gracz g:gracze.values())
         {
-            g.queue.add(ROZPOCZYNA_X);
+            g.queuePolecenie.add(new PolecenieRozpocznijGre(g,'x'));
         }
        
     }
@@ -126,7 +133,7 @@ public class Gra extends IGra{
         
         for(Gracz g: gracze.values())
         {
-            g.queue.add(ZAKONCZONO_GRE);
+            g.queuePolecenie.add(new PolecenieWyjdzZgry(g));
         }
         
         return 1;
@@ -141,7 +148,7 @@ public class Gra extends IGra{
     public void zmienTure() {
         for(Gracz g : gracze.values())
         {
-            g.queue.add(ZMIANA_TURY);
+            g.queuePolecenie.add(new PolecenieZmianaTury(g));
         }
         
     }
@@ -151,7 +158,7 @@ public class Gra extends IGra{
         //queue.add(KONIEC_GRY);
         for(Gracz g : gracze.values())
         {
-            g.queue.add(KTOS_WYGRAL);
+            g.queuePolecenie.add(new PolecenieWygrana(g));
         }
     }
     @Override

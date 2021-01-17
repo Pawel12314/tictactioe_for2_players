@@ -8,6 +8,7 @@ package visitor;
 import java.awt.Point;
 import pionek.PionekFactory.IPionekFactory;
 import plansza.Plansza;
+//import plansza.PlanszaNagranie;
 
 /**
  *
@@ -28,15 +29,15 @@ public class WstawO extends WstawPole{
         return punkt;
     }
     @Override
-    public Object wykonajNaPlanszy(Plansza p) {
+    public Object wykonaj(Plansza p) {
         p.pobierzPlansze().add(this);
         return null;
     }
 
-    @Override
-    public Object wykonajNaPowtorce(Plansza p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   // @Override
+    //public Object wykonaj(PlanszaNagranie p) {
+   //     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+   // }
 
     @Override
     public String getPath() {
