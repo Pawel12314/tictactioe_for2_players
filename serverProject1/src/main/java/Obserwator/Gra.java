@@ -26,6 +26,7 @@ import com.mycompany.serverproject1.Pionek.PionekPusty;
 import com.mycompany.serverproject1.Pionek.PionekX;
 import com.mycompany.serverproject1.Plansza.FactoryMethodChar;
 import com.mycompany.serverproject1.Plansza.FactoryMethodEmptyChar;
+import com.mycompany.serverproject1.Plansza.FactoryMethodNotDefinedChar;
 import com.mycompany.serverproject1.Plansza.FactoryMethodOPlayer;
 import com.mycompany.serverproject1.Plansza.FactoryMethodPlayerXChar;
 import com.mycompany.serverproject1.Plansza.IPlansza;
@@ -71,6 +72,7 @@ public class Gra extends IGra{
     
     
     private FactoryMethodChar factoryEmptyChar;
+    private FactoryMethodChar factoryNDchar;
     private Map<Character,Gracz> gracze = new ConcurrentHashMap<Character,Gracz>();
     private String copyfilename="pamiatka.bin";
     //private Map<IGra,Set<Gracz>>gry = new ConcurrentHashMap<IGra,Set<Gracz>>();
@@ -81,8 +83,8 @@ public class Gra extends IGra{
         IIteratorPlansza iterator = plansza.Pobierziterator(metoda);
         while(iterator.czyNastepny())
         {
-            System.out.println(iterator.obecny());
-            if(factoryEmptyChar.getChar()==iterator.obecny())
+            System.out.println("-"+iterator.obecny()+"- ITERATOR");
+            if(iterator.obecny()==factoryEmptyChar.getChar()|| iterator.obecny()==factoryNDchar.getChar() )
             {
                 return false;
             }
@@ -116,11 +118,26 @@ public class Gra extends IGra{
         
         
         factoryEmptyChar = new FactoryMethodEmptyChar();
-        if(sprawdzCzyPelna()==true)
+        factoryNDchar = new FactoryMethodNotDefinedChar();
+        if(sprawdzCzyPelna()==true||sprawdzCzyWygrana()==true)
         {
-            plansza= new PlanszaProxyWirtualne();
-            new File(copyfilename).delete();
-          
+            System.out.println("plansza jest pelna");
+            this.plansza =null;
+            this.plansza= new PlanszaProxyWirtualne();
+            /*if(sprawdzCzyPelna()==true)
+            {
+                System.out.println("plansza nie wyczyszczona");
+                
+            }
+            else
+            {
+                System.out.println("plansza wyczyszczona");
+            }*/
+            //File dir = new File("./");
+            //dir.mkdirs();
+            //File tmp = new File(dir, "tmp.txt");
+            new File("./"+copyfilename).delete();
+          // File.delete(copyfilename);
         }
         
     //    this.mutex = new Object();

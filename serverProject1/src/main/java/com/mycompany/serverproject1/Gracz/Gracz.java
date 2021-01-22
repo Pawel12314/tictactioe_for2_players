@@ -52,7 +52,7 @@ public class Gracz extends Thread{//
     public IStanGracza stan;
     Object graczMutex;
     public BlockingQueue<Polecenie>queuePolecenie;
-    
+    private boolean ruch=false;
     public BlockingQueue<String> queue;
     //Object serverMutex;
     public Gracz(FactoryMethodChar p,Socket socket, IGra g)
@@ -148,6 +148,7 @@ public class Gracz extends Thread{//
             while( !stan.sprawdzCzyKoniec())
             {
               
+               // synchronized(this)
              
               String command = getPlayerStream();
               
@@ -159,6 +160,7 @@ public class Gracz extends Thread{//
               {
                   continue;
               }
+              while(!queuePolecenie.isEmpty())
               queuePolecenie.take().wykonaj();
              
             }
@@ -200,6 +202,7 @@ public class Gracz extends Thread{//
             
             else
             {
+                
                 output.println(ZLA_INSTRUKCJA);
             }
             
@@ -235,7 +238,7 @@ public class Gracz extends Thread{//
         }
 
         @Override
-        public void wstawPionka(char pionek, int x, int y) {
+        public synchronized void  wstawPionka(char pionek, int x, int y) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
@@ -301,6 +304,7 @@ public class Gracz extends Thread{//
               //  output.println(command[1]+" "+command[2]+" endl");
                 try
                 {
+                    //ruch=true;
                     int x = Integer.parseInt(command[1]);
                     int y = Integer.parseInt(command[2]);
                     if(gra_mediator.czyMogeRuszyc(x, y))
@@ -365,9 +369,9 @@ public class Gracz extends Thread{//
         }
 
         @Override
-        public void wstawPionka(char pionek, int x, int y) {
+        public synchronized void wstawPionka(char pionek, int x, int y) {
             output.println("PUT "+pionek+" "+String.valueOf(x)+" "+String.valueOf(y));
-                
+                ruch=false;
                 if(gra_mediator.sprawdzCzyWygrana())
                         {
                             gra_mediator.poinformujOWygranej();
@@ -389,7 +393,7 @@ public class Gracz extends Thread{//
         }
 
         @Override
-        public void rozpocznijGre(Character pionek) {
+        public synchronized void rozpocznijGre(Character pionek) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
@@ -456,12 +460,12 @@ public class Gracz extends Thread{//
         }
 
         @Override
-        public void wstawPionka(char pionek, int x, int y) {
+        public synchronized void wstawPionka(char pionek, int x, int y) {
             output.println("PUT "+pionek+" "+String.valueOf(x)+" "+String.valueOf(y));
         }
 
         @Override
-        public void rozpocznijGre(Character pionek) {
+        public synchronized void rozpocznijGre(Character pionek) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
         
@@ -509,34 +513,17 @@ public class Gracz extends Thread{//
         }
 
         @Override
-        public void wstawPionka(char pionek, int x, int y) {
+        public synchronized void wstawPionka(char pionek, int x, int y) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void rozpocznijGre(Character pionek) {
+        public synchronized void rozpocznijGre(Character pionek) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
        
     }
-    public class StanFabrykaMojaTura extends IStanFabryka
-    {
-
-        @Override
-        public IStanGracza stworzStan() {
-            return new StanTuraGracza();
-        }
-        
-        
-    }
-    public class StanFabrykaTuraPrzeciwnika extends IStanFabryka
-    {
-        @Override
-        public IStanGracza stworzStan()
-        {
-            return new StanTuraPrzeciwnika();
-        }
-    }
+ 
     
 }
