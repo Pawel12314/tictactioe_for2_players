@@ -14,8 +14,8 @@ import com.mycompany.serverproject1.Pionek.IPionek;
 public interface IIteratorPlansza {
     
     
-    public IPionek pierwszy();
+    public char pierwszy();
     public Boolean czyNastepny();
-    public IPionek nastepny() throws IndexOutOfBoundsException;
-    public IPionek obecny();
+    public char nastepny() throws IndexOutOfBoundsException;
+    public char obecny();
 }

@@ -29,7 +29,7 @@ public class IteratorPionowy implements IIteratorPlansza {
         this.plansza = plansza;
     }
     @Override
-    public IPionek pierwszy() {
+    public char pierwszy() {
         return plansza.pobierzPionka(pierwszy_x, pierwszy_y);
     }
 
@@ -51,7 +51,7 @@ public class IteratorPionowy implements IIteratorPlansza {
     }
 
     @Override
-    public IPionek nastepny() throws IndexOutOfBoundsException{
+    public char nastepny() throws IndexOutOfBoundsException{
         if(plansza.SprawdzCzyPoleIstnieje(x, y+1))
          {
              y++;
@@ -70,7 +70,7 @@ public class IteratorPionowy implements IIteratorPlansza {
     }
 
     @Override
-    public IPionek obecny() {
+    public char obecny() {
         
         
             return plansza.pobierzPionka(x, y);

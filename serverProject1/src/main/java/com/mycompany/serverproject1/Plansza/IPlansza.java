@@ -18,11 +18,15 @@ import com.mycompany.serverproject1.Pionek.PionekFabryka.IFabrykaPionek;
 public interface  IPlansza {
     
     public Boolean SprawdzCzyPoleIstnieje(int x , int y);
-    public void dodajPionka(int x, int y,IPionek p);
-    public IPionek pobierzPionka(int x, int y) throws IndexOutOfBoundsException;
+    public void dodajPionka(int x, int y,char p);
+    public char pobierzPionka(int x, int y) throws IndexOutOfBoundsException;
     public int getSzerokosc();
     public int getWysokosc();
     public IIteratorPlansza Pobierziterator(IMetodaPlansza metoda);
     public int getLicznik();
     public Boolean SprawdzCzyPoleZajete(int x, int y) throws IndexOutOfBoundsException;
+    
+    public Pamiatka stworzPamiatke();
+
+    public void przywroc(Pamiatka p);
 }

@@ -26,7 +26,7 @@ public class IteratorUkosnyDoTylu implements IIteratorPlansza{
         plansza=p;
     }
     @Override
-    public IPionek pierwszy() {
+    public char pierwszy() {
         return plansza.pobierzPionka(pierwszy_x, pierwszy_y);
     }
 
@@ -40,7 +40,7 @@ public class IteratorUkosnyDoTylu implements IIteratorPlansza{
     }
 
     @Override
-    public IPionek nastepny() throws IndexOutOfBoundsException {
+    public char nastepny() throws IndexOutOfBoundsException {
         if(plansza.SprawdzCzyPoleIstnieje(x-1, y+1))
         {
             x--;
@@ -51,7 +51,7 @@ public class IteratorUkosnyDoTylu implements IIteratorPlansza{
     }
 
     @Override
-    public IPionek obecny() {
+    public char obecny() {
         
             return plansza.pobierzPionka(x, y);
         

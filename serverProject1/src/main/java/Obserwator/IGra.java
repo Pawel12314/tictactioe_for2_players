@@ -29,7 +29,7 @@ public abstract class IGra {
     //protected ManagerGier manager;
     protected IPlansza plansza;
     protected abstract void RozpocznijGre();
-    public abstract void wstawPionka(int x, int y, IPionek p) throws NoSuchFieldException;
+    public abstract void wstawPionka(int x, int y, char p);
     public abstract boolean czyMogeRuszyc(int x, int y);
     //public ExecutorService executors;
     public abstract int getGraczeSize();
@@ -42,6 +42,8 @@ public abstract class IGra {
     protected abstract boolean iteruj(IIteratorPlansza iter);
     public abstract boolean sprawdzCzyKoniec();
     public Object serverMutex;
+    public abstract void wyslijPionka(int x, int y,char p,Gracz g);
+    public abstract void pobierzPlansze(Gracz g);
     public IGra( IPlansza plansza)
     {
         //executors = Executors.newFixedThreadPool(2);

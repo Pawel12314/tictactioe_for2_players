@@ -43,7 +43,7 @@ public class serverProject1 {
             //var pool = Executors.newFixedThreadPool(2);
             //ManagerGier manager = new ManagerGier();
             //var future = listener.accept();
-            IGra gra = new Gra(new PlanszaProxyWirtualne(new FabrykaPustyPionek()));
+            IGra gra = new Gra(new PlanszaProxyWirtualne());
             while (gra.getGraczeSize()!=2) {
                 //manager.register(listener.accept());
                 //Future<AsynchronousSocketChannel> asyncFuture = listener

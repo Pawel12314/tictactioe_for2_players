@@ -10,7 +10,10 @@ import Obserwator.IGra;
 import com.mycompany.serverproject1.Gracz.Polecenie.Polecenie;
 import com.mycompany.serverproject1.Gracz.Stany.IStanFabryka;
 import com.mycompany.serverproject1.Gracz.Stany.IStanGracza;
+import com.mycompany.serverproject1.IteratorPoPlanszy.Gosc.IMetodaPlansza;
+import com.mycompany.serverproject1.IteratorPoPlanszy.Gosc.MetodaIteratorPionowy;
 import com.mycompany.serverproject1.Pionek.IPionek;
+import com.mycompany.serverproject1.Plansza.FactoryMethodChar;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -41,7 +44,7 @@ import java.util.stream.Collectors;
  */
 public class Gracz extends Thread{//
     //implements IGraczObserwator{
-    private IPionek pionek;
+    private FactoryMethodChar pionek;
     Socket  socket;
     IGra gra_mediator;
     Scanner input;
@@ -52,7 +55,7 @@ public class Gracz extends Thread{//
     
     public BlockingQueue<String> queue;
     //Object serverMutex;
-    public Gracz(IPionek p,Socket socket, IGra g)
+    public Gracz(FactoryMethodChar p,Socket socket, IGra g)
     {
         graczMutex = new Object();
         this.socket=socket;
@@ -240,11 +243,12 @@ public class Gracz extends Thread{//
         public void rozpocznijGre(Character pionekRozpoczynajacy) {
            
             
+            
               
-                try
-                {
-                    if(pionekRozpoczynajacy.equals(pionek.getPionek()))
+                    gra_mediator.pobierzPlansze(Gracz.this);
+                    if(pionekRozpoczynajacy.equals(pionek.getChar()))
                     {
+                        
                         output.println(TY_ZACZYNASZ);
                         stan = new StanTuraGracza();
                         
@@ -254,12 +258,11 @@ public class Gracz extends Thread{//
                         output.println(ZACZYNA_PRZECIWNIK);
                         stan = new StanTuraPrzeciwnika();
                     }
-                }catch(NoSuchFieldException e)
-                {
-                    e.printStackTrace();
-                }
+                
             
         }
+
+        
 
         
         
@@ -303,7 +306,7 @@ public class Gracz extends Thread{//
                     if(gra_mediator.czyMogeRuszyc(x, y))
                     {
                         
-                        gra_mediator.wstawPionka(x, y, pionek);
+                        gra_mediator.wstawPionka(x, y, pionek.getChar());
                         
                         
                         
@@ -321,10 +324,7 @@ public class Gracz extends Thread{//
                     e.printStackTrace();
                     output.println(BAD_MOVE);
                 }
-                catch(NoSuchFieldException e)
-                {
-                    e.printStackTrace();
-                }
+                
             }
             
             else
@@ -392,6 +392,8 @@ public class Gracz extends Thread{//
         public void rozpocznijGre(Character pionek) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
+
+       
         
     }
     

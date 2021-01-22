@@ -33,6 +33,7 @@ public abstract class IStanGracza {
     public abstract void remis();
     public abstract void wstawPionka(char pionek,int x, int y);
     public abstract void rozpocznijGre(Character pionek);
+ 
     //public boolean czyMogeRuszyc();
     //public boolean rusz();
     //public boolean czyWygralem();

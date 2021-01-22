@@ -20,23 +20,27 @@ public class PlanszaProxyWirtualne implements IPlansza{
     private Plansza plansza;
     private IFabrykaPionek fabrykaPusty;
     private int licznik=0;
-    public PlanszaProxyWirtualne(IFabrykaPionek fabryka)
+    private FactoryMethodChar factoryNotDefinedChar;
+    private FactoryMethodChar factoryEmptyChar;
+    public PlanszaProxyWirtualne()
     {
-        this.fabrykaPusty = fabryka;
+        //this.fabrykaPusty = fabryka;
         plansza = null;
+        factoryNotDefinedChar = new FactoryMethodNotDefinedChar();
+        factoryEmptyChar = new FactoryMethodEmptyChar();
     }
     @Override
-    public void dodajPionka(int x, int y, IPionek p) {
+    public void dodajPionka(int x, int y, char p) {
         if(plansza==null)
         {
-            plansza=new Plansza(fabrykaPusty);
+            plansza=new Plansza();
         }
         plansza.dodajPionka(x, y, p);
         licznik++;
     }
 
     @Override
-    public IPionek pobierzPionka(int x, int y) throws IndexOutOfBoundsException {
+    public char pobierzPionka(int x, int y) throws IndexOutOfBoundsException {
         
         
         if(SprawdzCzyPoleIstnieje(x, y)==false)
@@ -46,9 +50,9 @@ public class PlanszaProxyWirtualne implements IPlansza{
         if(plansza == null)
         {
             
-            return fabrykaPusty.StworzPionka();
+            return factoryEmptyChar.getChar();
         }   
-        IPionek p;
+        char p;
         
         
         p = plansza.pobierzPionka(x, y);
@@ -108,6 +112,24 @@ public class PlanszaProxyWirtualne implements IPlansza{
             return false;
         }
         return plansza.SprawdzCzyPoleZajete(x, y);
+    }
+
+    @Override
+    public Pamiatka stworzPamiatke() {
+        if(plansza ==null)
+        {
+            plansza = new Plansza();
+        }
+        return plansza.stworzPamiatke();
+    }
+
+    @Override
+    public void przywroc(Pamiatka p) {
+        if(plansza ==null)
+        {
+            plansza =new Plansza();
+        }
+        plansza.przywroc(p);
     }
 
     

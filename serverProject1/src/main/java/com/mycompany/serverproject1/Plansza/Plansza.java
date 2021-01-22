@@ -19,23 +19,28 @@ import com.mycompany.serverproject1.Pionek.PionekPusty;
  */
 public class Plansza implements IPlansza {
 
-    private IPionek[][] plansza;
+    private char[][] plansza;
     private IFabrykaPionek fabrykaPusty;
     private int licznik=0;
-    public Plansza(IFabrykaPionek fabryka)
+    
+    private FactoryMethodChar factoryNotDefinedChar;
+    private FactoryMethodChar factoryEmptyChar;
+    public Plansza()
     {
-        this.fabrykaPusty = fabryka;
-        plansza = new IPionek[3][3];
+        //this.fabrykaPusty = fabryka;
+        plansza = new char[3][3];
+        factoryNotDefinedChar= new FactoryMethodNotDefinedChar();
+        factoryEmptyChar = new FactoryMethodEmptyChar();
     }
     @Override
-    public void dodajPionka(int x, int y, IPionek p) {
+    public void dodajPionka(int x, int y, char p) {
         plansza[x][y]= p;
         licznik++;
     }
 
     @Override
-    public IPionek pobierzPionka(int x, int y) throws IndexOutOfBoundsException{
-        IPionek p= null;
+    public char pobierzPionka(int x, int y) throws IndexOutOfBoundsException{
+        char p;//= ' ';
         
         if(SprawdzCzyPoleIstnieje(x, y)==false)
         {
@@ -43,8 +48,8 @@ public class Plansza implements IPlansza {
         }
         
            p = plansza[x][y];
-       if(p==null){
-           p = fabrykaPusty.StworzPionka();
+       if(p==factoryNotDefinedChar.getChar()){
+           p = factoryEmptyChar.getChar();
        }
        
         return p;
@@ -86,7 +91,7 @@ public class Plansza implements IPlansza {
         {
             throw new IndexOutOfBoundsException();
         }
-        if(plansza[x][y] ==null)
+        if(plansza[x][y] ==factoryNotDefinedChar.getChar())
         {
             return false;
         }
@@ -95,7 +100,30 @@ public class Plansza implements IPlansza {
             return true;
         }
     }
-
-
+    @Override
+    public Pamiatka stworzPamiatke()
+    {
+        return new PlanszaMemento().setStan(plansza);
+    }
+    @Override
+    public void przywroc(Pamiatka p)
+    {
+        plansza = p.getStan();
+    }
+   private static class PlanszaMemento implements Pamiatka
+   {
+       private char[][] stan;
+       
+       public PlanszaMemento setStan(char[][] stan)
+       {
+           this.stan =stan;
+           return this;
+       }
+       public char[][] getStan()
+       {
+           return this.stan;
+       }
+       
+   }
     
 }
