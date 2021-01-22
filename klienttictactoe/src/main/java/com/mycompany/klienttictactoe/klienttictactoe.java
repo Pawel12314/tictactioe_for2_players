@@ -115,35 +115,7 @@ public class klienttictactoe extends JPanel{
 	}
     
     
-/*
-    @Override
-    public synchronized void addMouseListener(MouseListener l) {
-        super.addMouseListener(new MouseAdapter(){
-            public void mousePressed(MouseEvent ev) {
-                int width = klienttictactoe.this.getWidth();
-                int height = klienttictactoe.this.getHeight();
-                int x = (ev.getX()-ev.getX()%width)/width;
-                int y = (ev.getY()-ev.getY()%height)/height;
-                
-                JOptionPane.showMessageDialog(null, "  "+x+"   "+y,"action",JOptionPane.INFORMATION_MESSAGE);
-                try
-                {
-                    out.println("move"+" "+String.valueOf(x)+" "+String.valueOf(y));
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-                //JOptionPane.showMessageDialog(null, "click: x>"+x+" y>"+y,"action",JOptionPane.INFORMATION_MESSAGE);
-		}
 
-            public void mouseReleased(MouseEvent ev) {
-
-            }
-        }); //To change body of generated methods, choose Tools | Templates.
-    
-    
-    }*/
     
     public klienttictactoe(String address)
     {
@@ -161,7 +133,7 @@ public class klienttictactoe extends JPanel{
         }
         try
         {
-           background = new BackgroundFactory(); 
+          // background = new BackgroundFactory(); 
         }
         catch(Exception e)
         {
@@ -224,6 +196,7 @@ public class klienttictactoe extends JPanel{
             else if(command[0].equals(EXIT_MSG_GRA)&&command.length==1)
             {
                 JOptionPane.showMessageDialog(null, GAME_EXIT_MSG_GRA,"action",JOptionPane.INFORMATION_MESSAGE);
+                
                 out.close();
                 in.close();
             }
@@ -288,11 +261,18 @@ public class klienttictactoe extends JPanel{
         JFrame frame = new JFrame("Chess");
         frame.addWindowListener(new WindowAdapter() {
         public void windowClosing(WindowEvent e) {
-            if(board.socket==null||!board.socket.isClosed())
+            /*if(board.socket==null||!board.socket.isClosed())
             {
                 return;
+            }*/
+            try
+            {
+               board.out.println("exit"); 
             }
-          board.out.println("exit");
+            catch(Exception exception)
+            {
+                exception.printStackTrace();
+            }
             
         }
       });
