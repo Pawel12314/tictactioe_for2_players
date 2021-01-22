@@ -59,8 +59,8 @@ public class ConcretePionek implements IPionek {
             Image im = ImageIO.read(new File(path));
             //Graphics2D bmp = im.createGraphics();
             //Bitmap bitmap;// = BitmapFactory.decodeStream(instream);
-            IPionek p = new DekoratorPionek(new ConcretePionek(im));
-            //IPionek p = new ConcretePionek(im);
+            //IPionek p = new DekoratorPionek(new ConcretePionek(im));
+            IPionek p = new ConcretePionek(im);
             
             pionki.put(path, p);
             return p;

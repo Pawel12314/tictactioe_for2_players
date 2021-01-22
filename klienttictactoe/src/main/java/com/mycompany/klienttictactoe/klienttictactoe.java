@@ -29,6 +29,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import pionek.IPionek;
 import pionek.PionekFactory.BackgroundFactory;
+import pionek.PionekFactory.FiguryFactory;
 import pionek.PionekFactory.IBackgroundFactory;
 import pionek.PionekFactory.IPionekFactory;
 import pionek.PionekFactory.StandardFactory;
@@ -62,7 +63,8 @@ public class klienttictactoe extends JPanel{
     public static String REMIS="REMIS";
     public static String RUCH="MOVE";
     public static String PUT="PUT";
-    
+    public static String TY_ZACZYNASZ="ZACZYNASZ_GRE";
+    public static String ZACZYNA_PRZECIWNIK="ZACZYNA_PRZECIWNIK";
     
     public static String GAME_EXIT_MSG_KOLEJKA = "wyszedles z kolejki";
     public static String GAME_NIE_TWOJA_TURA = "nie twoja tura";
@@ -74,16 +76,19 @@ public class klienttictactoe extends JPanel{
     public static String GAME_YOU_WIN="Wygrales";
     public static String GAME_REMIS="REMIS";
     public static String GAME_CONNECTION_FAIL="nie udalo sie nawiazac polaczenia z sewrwerem";
+    public static String GAME_TY_ZACZYNASZ="zaczynasz grę. twój ruch";
+    public static String GAME_ZACZYNA_PRZECIWNIK="gre zaczyna przeciwnik, poczekaj  na jego ruch.";
     //public static String GAME_RUCH="MOVE";
     
     Socket socket;
     Scanner in;
     PrintWriter out;
-    StandardFactory pionekFactory;
+    IPionekFactory pionekFactory;
     @Override
     public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-                Frame frame= new Frame(300,300);
+                Frame frame= new Frame(this.getWidth(),getHeight());
+               
                 for(Line2D line : frame.getLinie())
                 {
                     g.drawLine((int)line.getP1().getX(), (int)line.getP1().getY(),(int)line.getP2().getX(), (int)line.getP2().getY());
@@ -95,10 +100,10 @@ public class klienttictactoe extends JPanel{
 		for (WstawPole pole : plansza.pobierzPlansze()) {//
                     try
                     {
-                        IPionek pionek = fabryka.getPionek(pole );
-                        //IPionek pionek = new DekoratorPionek(fabryka.getPionek(pole));
+                        //IPionek pionek = fabryka.getPionek(pole );
+                        IPionek pionek = new DekoratorPionek(fabryka.getPionek(pole),this.getWidth(),this.getHeight());
                          pionek.draw(g2d,pole.getPunkt());
-                         //pionek = pionek.getDecoree();
+                         pionek = pionek.getDecoree();
                     }
                     catch(IOException e)
                     {
@@ -110,11 +115,35 @@ public class klienttictactoe extends JPanel{
 	}
     
     
-
+/*
     @Override
     public synchronized void addMouseListener(MouseListener l) {
-        super.addMouseListener(l); //To change body of generated methods, choose Tools | Templates.
-    }
+        super.addMouseListener(new MouseAdapter(){
+            public void mousePressed(MouseEvent ev) {
+                int width = klienttictactoe.this.getWidth();
+                int height = klienttictactoe.this.getHeight();
+                int x = (ev.getX()-ev.getX()%width)/width;
+                int y = (ev.getY()-ev.getY()%height)/height;
+                
+                JOptionPane.showMessageDialog(null, "  "+x+"   "+y,"action",JOptionPane.INFORMATION_MESSAGE);
+                try
+                {
+                    out.println("move"+" "+String.valueOf(x)+" "+String.valueOf(y));
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+                //JOptionPane.showMessageDialog(null, "click: x>"+x+" y>"+y,"action",JOptionPane.INFORMATION_MESSAGE);
+		}
+
+            public void mouseReleased(MouseEvent ev) {
+
+            }
+        }); //To change body of generated methods, choose Tools | Templates.
+    
+    
+    }*/
     
     public klienttictactoe(String address)
     {
@@ -140,15 +169,19 @@ public class klienttictactoe extends JPanel{
             
         }
         plansza = new Plansza();
-        pionekFactory = new StandardFactory();
+        pionekFactory = new FiguryFactory();
         
         
         fabryka = new PionekPylekFactory();
         this.addMouseListener(new MouseAdapter(){
             public void mousePressed(MouseEvent ev) {
-                int x = (ev.getX()-ev.getX()%100)/100;
-                int y = (ev.getY()-ev.getY()%100)/100;
-                
+                int width = klienttictactoe.this.getWidth();
+                int height = klienttictactoe.this.getHeight();
+                width/=3;
+                height/=3;
+                int x = (ev.getX()-ev.getX()%width)/width;
+                int y = (ev.getY()-ev.getY()%height)/height;
+                //JOptionPane.showMessageDialog(null, "  "+x+"   "+y+"\n"+width+ " "+height,"action",JOptionPane.INFORMATION_MESSAGE);
                 
                 out.println("move"+" "+String.valueOf(x)+" "+String.valueOf(y));
                 //JOptionPane.showMessageDialog(null, "click: x>"+x+" y>"+y,"action",JOptionPane.INFORMATION_MESSAGE);
@@ -172,6 +205,14 @@ public class klienttictactoe extends JPanel{
             //String command= in.nextLine();
             
             String[] command = in.nextLine().replace("\n","").replace("\r","").split(" ");
+            if(command[0].equals(TY_ZACZYNASZ)&& command.length==1)
+            {
+                JOptionPane.showMessageDialog(null, GAME_TY_ZACZYNASZ,"action",JOptionPane.INFORMATION_MESSAGE);
+            }else
+            if(command[0].equals(ZACZYNA_PRZECIWNIK)&&command.length==1)
+            {
+                JOptionPane.showMessageDialog(null, GAME_ZACZYNA_PRZECIWNIK,"action",JOptionPane.INFORMATION_MESSAGE);
+            }else
             if(command[0].equals(BAD_MOVE)&&command.length==1)
             {
                 JOptionPane.showMessageDialog(null, GAME_BAD_MOVE,"action",JOptionPane.INFORMATION_MESSAGE);

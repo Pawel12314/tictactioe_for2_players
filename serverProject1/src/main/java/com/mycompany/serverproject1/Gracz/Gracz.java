@@ -245,10 +245,13 @@ public class Gracz extends Thread{//
                 {
                     if(pionekRozpoczynajacy.equals(pionek.getPionek()))
                     {
+                        output.println(TY_ZACZYNASZ);
                         stan = new StanTuraGracza();
+                        
                     }
                     else
                     {
+                        output.println(ZACZYNA_PRZECIWNIK);
                         stan = new StanTuraPrzeciwnika();
                     }
                 }catch(NoSuchFieldException e)

@@ -17,9 +17,14 @@ import pionek.IPionek;
  * @author Geoff
  */
 public class DekoratorPionek extends IDekoratorPionek {
-
-    public DekoratorPionek(IPionek p) {
+    
+    
+    private int width;
+    private int height;
+    public DekoratorPionek(IPionek p,int width,int height) {
         super(p);
+        this.width=width/3;
+        this.height=height/3;
     }
     
     
@@ -29,7 +34,7 @@ public class DekoratorPionek extends IDekoratorPionek {
          AffineTransform trans = g.getTransform();
         AffineTransform tr = new AffineTransform();
         //tr.translate(0,0);
-        tr.scale(TILESIZE, TILESIZE);
+        tr.scale(this.width, this.height);
         g.transform(tr);
         super.draw(g,p);
         g.setTransform(trans);

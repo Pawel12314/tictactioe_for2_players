@@ -23,6 +23,8 @@ public abstract class IStanGracza {
     public static String YOU_WIN="WON";
     public static String REMIS="REMIS";
     public static String RUCH="MOVE";
+    public static String TY_ZACZYNASZ="ZACZYNASZ_GRE";
+    public static String ZACZYNA_PRZECIWNIK="ZACZYNA_PRZECIWNIK";
     public abstract void wygrana();
     public abstract String pobierzStrumienWejsciowy(String strumien);
     public abstract void zmienTure();
