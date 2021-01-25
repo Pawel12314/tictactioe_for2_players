@@ -11,19 +11,22 @@ import com.mycompany.serverproject1.Gracz.Gracz;
  *
  * @author Geoff
  */
-public class PolecenieRozpocznijGre implements Polecenie{
+public class VisitorWstawPionka implements VisitorState{
 
-    private Gracz gracz;
-    private char pionek;
     
-    public PolecenieRozpocznijGre(Gracz gracz,char pionek)
+    private char pionek;
+    private int x;
+    private int y;
+    public VisitorWstawPionka(char pionek, int x, int y)
     {
-        this.gracz= gracz;
+        
         this.pionek = pionek;
+        this.x=x;
+        this.y=y;
     }
     @Override
-    public void wykonaj() {
-        gracz.stan.rozpocznijGre(pionek);
+    public void wykonaj(Gracz gracz) {
+        gracz.stan.wstawPionka(pionek, x, y);
     }
     
 }

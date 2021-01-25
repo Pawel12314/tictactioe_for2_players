@@ -7,7 +7,6 @@ package com.mycompany.serverproject1.Gracz;
 
 import Obserwator.Gra;
 import Obserwator.IGra;
-import com.mycompany.serverproject1.Gracz.Polecenie.Polecenie;
 import com.mycompany.serverproject1.Gracz.Stany.IStanFabryka;
 import com.mycompany.serverproject1.Gracz.Stany.IStanGracza;
 import com.mycompany.serverproject1.IteratorPoPlanszy.Gosc.IMetodaPlansza;
@@ -36,7 +35,11 @@ import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
+import com.mycompany.serverproject1.Gracz.Polecenie.VisitorState;
 
 /**
  *
@@ -51,17 +54,22 @@ public class Gracz extends Thread{//
     PrintWriter output;
     public IStanGracza stan;
     Object graczMutex;
-    public BlockingQueue<Polecenie>queuePolecenie;
+    public BlockingQueue<VisitorState>queuePolecenie;
     private boolean ruch=false;
     public BlockingQueue<String> queue;
     //Object serverMutex;
+    
+    // private final Lock lock = new ReentrantLock();
+
+   // private final Condition wstawianiepionka = lock.newCondition();
+   // private boolean czywstawiapionek=false;
     public Gracz(FactoryMethodChar p,Socket socket, IGra g)
     {
         graczMutex = new Object();
         this.socket=socket;
         this.pionek = p;
         queue= new LinkedBlockingDeque<String>();
-        queuePolecenie = new LinkedBlockingQueue<Polecenie>();
+        queuePolecenie = new LinkedBlockingQueue<VisitorState>();
        /* try
         {
             socket.setSoTimeout(5000);
@@ -147,7 +155,7 @@ public class Gracz extends Thread{//
             }
             while( !stan.sprawdzCzyKoniec())
             {
-              
+               
                // synchronized(this)
              
               String command = getPlayerStream();
@@ -161,7 +169,7 @@ public class Gracz extends Thread{//
                   continue;
               }
               while(!queuePolecenie.isEmpty())
-              queuePolecenie.take().wykonaj();
+              queuePolecenie.take().wykonaj(this);
              
             }
             

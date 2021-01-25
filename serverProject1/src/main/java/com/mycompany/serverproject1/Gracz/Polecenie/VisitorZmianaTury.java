@@ -11,16 +11,16 @@ import com.mycompany.serverproject1.Gracz.Gracz;
  *
  * @author Geoff
  */
-public class PolecenieZmianaTury implements Polecenie {
+public class VisitorZmianaTury implements VisitorState {
 
     
-    private Gracz gracz;
-    public PolecenieZmianaTury(Gracz gracz)
+    
+    public VisitorZmianaTury()
     {
-        this.gracz = gracz;
+        
     }
     @Override
-    public void wykonaj() {
+    public void wykonaj(Gracz gracz) {
         gracz.stan.zmienTure();
     }
     

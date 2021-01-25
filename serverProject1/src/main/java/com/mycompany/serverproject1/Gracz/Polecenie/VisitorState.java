@@ -5,10 +5,12 @@
  */
 package com.mycompany.serverproject1.Gracz.Polecenie;
 
+import com.mycompany.serverproject1.Gracz.Gracz;
+
 /**
  *
  * @author Geoff
  */
-public interface Polecenie {
-    public void wykonaj();
+public interface VisitorState {
+    public void wykonaj(Gracz g);
 }

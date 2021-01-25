@@ -11,15 +11,17 @@ import com.mycompany.serverproject1.Gracz.Gracz;
  *
  * @author Geoff
  */
-public class PolecenieRemis implements Polecenie{
+public class VisitorWygrana implements VisitorState{
 
-    private Gracz gracz;
-    public PolecenieRemis(Gracz gracz){
-        this.gracz = gracz;
+    
+    
+    public VisitorWygrana()
+    {
+        
     }
     @Override
-    public void wykonaj() {
-        gracz.stan.remis();
+    public void wykonaj(Gracz gracz) {
+        gracz.stan.wygrana();
     }
     
 }

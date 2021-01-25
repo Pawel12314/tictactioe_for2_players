@@ -6,11 +6,11 @@
 package Obserwator;
 
 import com.mycompany.serverproject1.Gracz.Gracz;
-import com.mycompany.serverproject1.Gracz.Polecenie.PolecenieRozpocznijGre;
-import com.mycompany.serverproject1.Gracz.Polecenie.PolecenieWstawPionka;
-import com.mycompany.serverproject1.Gracz.Polecenie.PolecenieWygrana;
-import com.mycompany.serverproject1.Gracz.Polecenie.PolecenieWyjdzZgry;
-import com.mycompany.serverproject1.Gracz.Polecenie.PolecenieZmianaTury;
+import com.mycompany.serverproject1.Gracz.Polecenie.VisitorRozpocznijGre;
+import com.mycompany.serverproject1.Gracz.Polecenie.VisitorWstawPionka;
+import com.mycompany.serverproject1.Gracz.Polecenie.VisitorWygrana;
+import com.mycompany.serverproject1.Gracz.Polecenie.VisitorWyjdzZgry;
+import com.mycompany.serverproject1.Gracz.Polecenie.VisitorZmianaTury;
 import com.mycompany.serverproject1.Gracz.Stany.IStanFabryka;
 import com.mycompany.serverproject1.IteratorPoPlanszy.Gosc.IMetodaPlansza;
 import com.mycompany.serverproject1.IteratorPoPlanszy.Gosc.MetodaIteratorPionowy;
@@ -173,7 +173,7 @@ public class Gra extends IGra{
             for(Gracz g : gracze.values())
             {
                 
-                g.queuePolecenie.add(new PolecenieWstawPionka(g, p ,x, y));
+                g.queuePolecenie.add(new VisitorWstawPionka( p ,x, y));
                 
             }
         
@@ -184,7 +184,7 @@ public class Gra extends IGra{
     {
         
                 
-                g.queuePolecenie.add(new PolecenieWstawPionka(g, p ,x, y));
+                g.queuePolecenie.add(new VisitorWstawPionka( p ,x, y));
                 
             
     }
@@ -196,7 +196,7 @@ public class Gra extends IGra{
         
         for(Gracz g:gracze.values())
         {
-            g.queuePolecenie.add(new PolecenieRozpocznijGre(g,'x'));
+            g.queuePolecenie.add(new VisitorRozpocznijGre('x'));
             
                 
         }
@@ -255,7 +255,7 @@ public class Gra extends IGra{
         //oos.close();
         for(Gracz g: gracze.values())
         {
-            g.queuePolecenie.add(new PolecenieWyjdzZgry(g));
+            g.queuePolecenie.add(new VisitorWyjdzZgry());
         }
         
         return 1;
@@ -270,7 +270,7 @@ public class Gra extends IGra{
     public void zmienTure() {
         for(Gracz g : gracze.values())
         {
-            g.queuePolecenie.add(new PolecenieZmianaTury(g));
+            g.queuePolecenie.add(new VisitorZmianaTury());
         }
         
     }
@@ -282,7 +282,7 @@ public class Gra extends IGra{
             new File(copyfilename).delete();
         for(Gracz g : gracze.values())
         {
-            g.queuePolecenie.add(new PolecenieWygrana(g));
+            g.queuePolecenie.add(new VisitorWygrana());
         }
     }
     @Override
