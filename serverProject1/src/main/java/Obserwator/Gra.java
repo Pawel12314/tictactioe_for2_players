@@ -207,10 +207,12 @@ public class Gra extends IGra{
    @Override
     public synchronized void pobierzPlansze(Gracz g)
     {
+        
         for(int i =0;i<3;i++)
         {
             for(int u=0;u<3;u++)
             {
+                if(plansza.pobierzPionka(i, u)!=factoryEmptyChar.getChar())
                 wyslijPionka(i, u, plansza.pobierzPionka(i, u), g);
             }
         }
@@ -231,19 +233,24 @@ public class Gra extends IGra{
     @Override
     public synchronized int przerwijGre(/*IGraczObserwator gracz*/) {
         //Set<IGraczObserwator>gracze  = manager.pobierzGraczy(this);
-        Pamiatka pamiatka = plansza.stworzPamiatke();
+        if(!sprawdzCzyKoniec() && !sprawdzCzyWygrana())
+        {
+            Pamiatka pamiatka = plansza.stworzPamiatke();
+            try
+            {
+                ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(copyfilename)));
+                oos.writeObject(pamiatka);
+                oos.close();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
         
         
-        try
-        {
-            ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(copyfilename)));
-            oos.writeObject(pamiatka);
-            oos.close();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
+        
+        
         
         //oos.close();
         for(Gracz g: gracze.values())
@@ -271,7 +278,7 @@ public class Gra extends IGra{
     @Override
     public void poinformujOWygranej() {
         //queue.add(KONIEC_GRY);
-        plansza= new PlanszaProxyWirtualne();
+       // plansza= new PlanszaProxyWirtualne();
             new File(copyfilename).delete();
         for(Gracz g : gracze.values())
         {
@@ -331,7 +338,7 @@ public class Gra extends IGra{
         IMetodaPlansza metodaPionowy = new MetodaIteratorPionowy();
         IIteratorPlansza iterpionowy = plansza.Pobierziterator(metodaPionowy);
        if(iteruj(iterpionowy)) {
-           plansza= new PlanszaProxyWirtualne();
+          // plansza= new PlanszaProxyWirtualne();
             new File(copyfilename).delete();
        
            return true;
@@ -341,8 +348,8 @@ public class Gra extends IGra{
         IMetodaPlansza metodaPoziomy = new MetodaIteratorPoziomy();
         IIteratorPlansza iterpoziomy = plansza.Pobierziterator(metodaPoziomy);
        if(iteruj(iterpoziomy)) {
-           plansza= new PlanszaProxyWirtualne();
-            new File(copyfilename).delete();
+           //plansza= new PlanszaProxyWirtualne();
+           new File(copyfilename).delete();
        
            return true;
        }
@@ -350,7 +357,7 @@ public class Gra extends IGra{
        IMetodaPlansza metodaUkosny1 = new MetodaIteratorUkosnyDoPrzodu();
        IIteratorPlansza iterUkosny1 = plansza.Pobierziterator(metodaUkosny1);
        if(iteruj(iterUkosny1)) {
-           plansza= new PlanszaProxyWirtualne();
+          /// plansza= new PlanszaProxyWirtualne();
             new File(copyfilename).delete();
        
            return true;
@@ -360,7 +367,7 @@ public class Gra extends IGra{
        IIteratorPlansza iterUkosny2 = plansza.Pobierziterator(metodaUkosny2);
        if(iteruj(iterUkosny2)) 
        {
-           plansza= new PlanszaProxyWirtualne();
+           //plansza= new PlanszaProxyWirtualne();
             new File(copyfilename).delete();
        
            return true;
