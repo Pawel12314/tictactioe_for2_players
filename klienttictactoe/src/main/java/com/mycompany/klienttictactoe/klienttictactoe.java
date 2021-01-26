@@ -34,7 +34,16 @@ import pionek.PionekFactory.IPionekFactory;
 import pionek.PionekFactory.StandardFactory;
 import pionek.dekorator.DekoratorPionek;
 import pionek.pylek.PionekPylekFactory;
+import plansza.FactoryMethodBuilder;
+import plansza.FactoryMethodInProgress;
+import plansza.FactoryMethodLoose;
+import plansza.FactoryMethodNieTwojaTura;
+import plansza.FactoryMethodRemis;
+import plansza.FactoryMethodTwojaTura;
+import plansza.FactoryMethodWin;
+import plansza.FactoryMethodZlyRuch;
 import plansza.Frame;
+import plansza.IFrame;
 import plansza.IPlansza;
 import plansza.Plansza;
 import visitor.WstawO;
@@ -83,13 +92,15 @@ public class klienttictactoe extends JPanel{
     Scanner in;
     PrintWriter out;
     IPionekFactory pionekFactory;
+    FactoryMethodBuilder builderGetter;
     @Override
     public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-                Frame frame= new Frame(g,this.getWidth(),getHeight());
-               
+                //Frame frame= new Frame(g,this.getWidth(),getHeight());
+               IFrame frame = builderGetter.getFrame(this.getWidth(),this.getHeight(), g);
                 for(int i =1;i<3;i++)
                 {
+                    
                     frame.addHorizontal(3, i);
                     frame.addVertical(3, i);
                 }
@@ -121,6 +132,7 @@ public class klienttictactoe extends JPanel{
     
     public klienttictactoe(String address)
     {
+        this.builderGetter = new FactoryMethodInProgress();
         this.setPreferredSize(new Dimension(300, 300));
         try
         {
@@ -181,23 +193,31 @@ public class klienttictactoe extends JPanel{
             String[] command = in.nextLine().replace("\n","").replace("\r","").split(" ");
             if(command[0].equals(TY_ZACZYNASZ)&& command.length==1)
             {
-                JOptionPane.showMessageDialog(null, GAME_TY_ZACZYNASZ,"action",JOptionPane.INFORMATION_MESSAGE);
+                 builderGetter = new FactoryMethodTwojaTura();
+                 this.repaint();
+                //JOptionPane.showMessageDialog(null, GAME_TY_ZACZYNASZ,"action",JOptionPane.INFORMATION_MESSAGE);
             }else
             if(command[0].equals(ZACZYNA_PRZECIWNIK)&&command.length==1)
             {
-                JOptionPane.showMessageDialog(null, GAME_ZACZYNA_PRZECIWNIK,"action",JOptionPane.INFORMATION_MESSAGE);
+                 builderGetter = new FactoryMethodNieTwojaTura();
+                this.repaint();
+                //JOptionPane.showMessageDialog(null, GAME_ZACZYNA_PRZECIWNIK,"action",JOptionPane.INFORMATION_MESSAGE);
             }else
             if(command[0].equals(BAD_MOVE)&&command.length==1)
             {
-                JOptionPane.showMessageDialog(null, GAME_BAD_MOVE,"action",JOptionPane.INFORMATION_MESSAGE);
+                builderGetter = new FactoryMethodZlyRuch();
+                this.repaint();
+                //JOptionPane.showMessageDialog(null, GAME_BAD_MOVE,"action",JOptionPane.INFORMATION_MESSAGE);
             }
             else if(command[0].equals(CANT_MOVE)&& command.length==1)
             {
-                JOptionPane.showMessageDialog(null, GAME_CANT_MOVE,"action",JOptionPane.INFORMATION_MESSAGE);
+                //JOptionPane.showMessageDialog(null, GAME_CANT_MOVE,"action",JOptionPane.INFORMATION_MESSAGE);
             }
             else if(command[0].equals(EXIT_MSG_GRA)&&command.length==1)
             {
-                JOptionPane.showMessageDialog(null, GAME_EXIT_MSG_GRA,"action",JOptionPane.INFORMATION_MESSAGE);
+                builderGetter = new FactoryMethodInProgress();
+                this.repaint();
+                //JOptionPane.showMessageDialog(null, GAME_EXIT_MSG_GRA,"action",JOptionPane.INFORMATION_MESSAGE);
                 
                 out.close();
                 in.close();
@@ -209,25 +229,39 @@ public class klienttictactoe extends JPanel{
             }
             else if(command[0].equals(NIE_TWOJA_TURA)&&command.length==1)
             {
-                JOptionPane.showMessageDialog(null, GAME_NIE_TWOJA_TURA,"action",JOptionPane.INFORMATION_MESSAGE);
+                
+                //JOptionPane.showMessageDialog(null, GAME_NIE_TWOJA_TURA,"action",JOptionPane.INFORMATION_MESSAGE);
             }
             else if(command[0].equals(OPPONENT_WIN)&&command.length==1)
             {
-                JOptionPane.showMessageDialog(null, GAME_OPPONENT_WIN,"action",JOptionPane.INFORMATION_MESSAGE);
+                builderGetter = new FactoryMethodLoose();
+                this.repaint();
+                //JOptionPane.showMessageDialog(null, GAME_OPPONENT_WIN,"action",JOptionPane.INFORMATION_MESSAGE);
             }
             else if(command[0].equals(REMIS)&&command.length==1)
             {
-              JOptionPane.showMessageDialog(null, GAME_REMIS,"action",JOptionPane.INFORMATION_MESSAGE);  
+                builderGetter = new FactoryMethodRemis();
+                this.repaint();
+              //JOptionPane.showMessageDialog(null, GAME_REMIS,"action",JOptionPane.INFORMATION_MESSAGE);  
               
             }
             else if(command[0].equals(YOU_WIN)&& command.length==1)
             {
-                JOptionPane.showMessageDialog(null, GAME_YOU_WIN,"action",JOptionPane.INFORMATION_MESSAGE); 
+                builderGetter = new FactoryMethodWin();
+                this.repaint();
+                //JOptionPane.showMessageDialog(null, GAME_YOU_WIN,"action",JOptionPane.INFORMATION_MESSAGE); 
             }
             else if(command[0].equals(PUT)&&command.length==4)
             {
                 //JOptionPane.showMessageDialog(null, "otrzymano polecenie ruchu","action",JOptionPane.INFORMATION_MESSAGE);  
-                
+                if(builderGetter instanceof FactoryMethodNieTwojaTura)
+                {
+                    builderGetter = new FactoryMethodTwojaTura();
+                }
+                else
+                {
+                    builderGetter = new FactoryMethodNieTwojaTura();
+                }
                 try
                 {
                     //JOptionPane.showMessageDialog(null, "ruszyl pionek : ->"+command[1],"action",JOptionPane.INFORMATION_MESSAGE); 

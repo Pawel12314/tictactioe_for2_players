@@ -6,6 +6,7 @@
 package Obserwator;
 
 import com.mycompany.serverproject1.Gracz.Gracz;
+import com.mycompany.serverproject1.Gracz.Polecenie.VisitorRemis;
 import com.mycompany.serverproject1.Gracz.Polecenie.VisitorRozpocznijGre;
 import com.mycompany.serverproject1.Gracz.Polecenie.VisitorWstawPionka;
 import com.mycompany.serverproject1.Gracz.Polecenie.VisitorWygrana;
@@ -285,6 +286,13 @@ public class Gra extends IGra{
             g.queuePolecenie.add(new VisitorWygrana());
         }
     }
+    public void remis()
+   {
+       for(Gracz g : gracze.values())
+       {
+           g.queuePolecenie.add(new VisitorRemis());
+       }
+   }
     @Override
     protected boolean iteruj(IIteratorPlansza iter)
     {

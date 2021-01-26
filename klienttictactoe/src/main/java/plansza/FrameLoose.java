@@ -9,21 +9,16 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
 
 /**
  *
  * @author Geoff
  */
-public class Frame extends IFrame {
-    ArrayList<Line2D> linie;
+public class FrameLoose extends IFrame {
     int width;
     int height;
     Graphics2D graphic;
-    public Frame(Graphics g,int width,int height)
+    public FrameLoose(Graphics g,int width,int height)
     {
         
         this.graphic=(Graphics2D)g;
@@ -42,18 +37,18 @@ public class Frame extends IFrame {
     }
     public void addVertical(int denominator,int counter)
     {
-        graphic.setStroke(new BasicStroke(2));
-        graphic.setColor(Color.BLACK);
+        graphic.setStroke(new BasicStroke(5));
+        graphic.setColor(Color.RED);
          graphic.drawLine( (int)(width/denominator)*counter,0, (int)(width/denominator)*counter,height);
     }
     public void addHorizontal(int denominator,int counter)
     {
-        graphic.setStroke(new BasicStroke(2));
-        graphic.setColor(Color.BLACK);
+        graphic.setStroke(new BasicStroke(5));
+        graphic.setColor(Color.RED);
         graphic.drawLine( 0,(int)(height/denominator)*counter ,width, (int)(height/denominator)*counter);
     }
     public Graphics2D getLinie()
     {
         return graphic;
-    }
+    } 
 }

@@ -390,7 +390,7 @@ public class Gracz extends Thread{//
                         {
                             if(gra_mediator.sprawdzCzyKoniec())
                             {
-                                gra_mediator.przerwijGre();
+                                gra_mediator.remis();
                             }
                             else
                             {

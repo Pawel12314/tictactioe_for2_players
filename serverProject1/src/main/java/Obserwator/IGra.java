@@ -44,6 +44,7 @@ public abstract class IGra {
     public Object serverMutex;
     public abstract void wyslijPionka(int x, int y,char p,Gracz g);
     public abstract void pobierzPlansze(Gracz g);
+    public abstract void remis();
     public IGra( IPlansza plansza)
     {
         //executors = Executors.newFixedThreadPool(2);
@@ -70,6 +71,8 @@ public abstract class IGra {
     {
         return mutex;
     }
+
+    
 
     
            

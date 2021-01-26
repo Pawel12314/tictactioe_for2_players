@@ -11,10 +11,10 @@ import com.mycompany.serverproject1.Gracz.Gracz;
  *
  * @author Geoff
  */
-public class VistitorRemis implements VisitorState{
+public class VisitorRemis implements VisitorState{
 
    // private Gracz gracz;
-    public VistitorRemis(){
+    public VisitorRemis(){
         
     }
     @Override
