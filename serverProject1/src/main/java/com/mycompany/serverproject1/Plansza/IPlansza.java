@@ -23,7 +23,7 @@ public interface  IPlansza {
     public int getSzerokosc();
     public int getWysokosc();
     public IIteratorPlansza Pobierziterator(IMetodaPlansza metoda);
-    public int getLicznik();
+   
     public Boolean SprawdzCzyPoleZajete(int x, int y) throws IndexOutOfBoundsException;
     
     public Pamiatka stworzPamiatke();

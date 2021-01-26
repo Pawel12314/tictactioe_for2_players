@@ -79,10 +79,7 @@ public class Plansza implements IPlansza {
         return metoda.pobierzIterator(this);
     }
 
-    @Override
-    public int getLicznik() {
-        return licznik;
-    }
+   
 
     @Override
     public Boolean SprawdzCzyPoleZajete(int x, int y) throws IndexOutOfBoundsException {

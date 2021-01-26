@@ -5,6 +5,7 @@
  */
 package plansza;
 
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -16,10 +17,15 @@ import java.util.ArrayList;
  */
 public class Frame {
     ArrayList<Line2D> linie;
-    
-    public Frame(int width,int height)
+    int width;
+    int height;
+    Graphics graphic;
+    public Frame(Graphics g,int width,int height)
     {
-        linie = new ArrayList<Line2D>();
+        this.graphic=g;
+        this.width=width;
+        this.height = height;
+        /*linie = new ArrayList<Line2D>();
         Line2D s1 = new Line2D.Double(new Point(width/3,0),new Point(width/3,height));
         linie.add(s1);
         Line2D s2 = new Line2D.Double(new Point((width/3)*2,0),new Point((width/3)*2,height));
@@ -28,10 +34,18 @@ public class Frame {
         Line2D x1 = new Line2D.Double(new Point(0,(height/3)),new Point(width,(height/3)));
         linie.add(x1);
         Line2D x2 = new Line2D.Double(new Point(0,(height/3)*2),new Point(width,(height/3)*2));
-        linie.add(x2);
+        linie.add(x2);*/
     }
-    public ArrayList<Line2D> getLinie()
+    public void addVertical(int denominator,int counter)
     {
-        return linie;
+         graphic.drawLine( (int)(width/denominator)*counter,0, (int)(width/denominator)*counter,height);
+    }
+    public void addHorizontal(int denominator,int counter)
+    {
+        graphic.drawLine( 0,(int)(height/denominator)*counter ,width, (int)(height/denominator)*counter);
+    }
+    public Graphics getLinie()
+    {
+        return graphic;
     }
 }

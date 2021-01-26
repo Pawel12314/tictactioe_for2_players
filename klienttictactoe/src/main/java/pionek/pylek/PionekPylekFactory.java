@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import pionek.IPionek;
+import pionek.PionekFactory.IPionekFactory;
 import visitor.WstawPole;
 
 /**
@@ -19,8 +20,15 @@ import visitor.WstawPole;
 public class PionekPylekFactory {
     private Map<WstawPole,IPionek> pionki = new LinkedHashMap<WstawPole, IPionek>();
     
+    
+    /*private IPionekFactory pionekmetodafabrykujaca;
+    public PionekPylekFactory(IPionekFactory pionekFactoryMethod)
+    {   
+        this.pionekmetodafabrykujaca = pionekFactoryMethod;
+    }*/
     public IPionek getPionek(WstawPole point) throws IOException
     {
+        
         if(pionki.containsKey(point))
         {
             return pionki.get(point);

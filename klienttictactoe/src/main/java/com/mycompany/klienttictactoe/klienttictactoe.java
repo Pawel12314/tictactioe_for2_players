@@ -28,7 +28,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import pionek.IPionek;
-import pionek.PionekFactory.BackgroundFactory;
 import pionek.PionekFactory.FiguryFactory;
 import pionek.PionekFactory.IBackgroundFactory;
 import pionek.PionekFactory.IPionekFactory;
@@ -87,12 +86,15 @@ public class klienttictactoe extends JPanel{
     @Override
     public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-                Frame frame= new Frame(this.getWidth(),getHeight());
+                Frame frame= new Frame(g,this.getWidth(),getHeight());
                
-                for(Line2D line : frame.getLinie())
+                for(int i =1;i<3;i++)
                 {
-                    g.drawLine((int)line.getP1().getX(), (int)line.getP1().getY(),(int)line.getP2().getX(), (int)line.getP2().getY());
+                    frame.addHorizontal(3, i);
+                    frame.addVertical(3, i);
                 }
+                g=frame.getLinie();
+                
                 
 		//g.drawImage(background.getBackgorund(), 0, 0, null);
 		Graphics2D g2d = (Graphics2D) g;

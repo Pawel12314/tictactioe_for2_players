@@ -44,6 +44,8 @@ public class ConcretePionek implements IPionek {
 
     
     public static IPionek getByBitmap(String path) throws IOException{
+        System.out.println(pionki.size());
+        
         if(pionki.containsKey(path))
         {
             return pionki.get(path);
